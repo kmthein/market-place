@@ -2,12 +2,20 @@ import React from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import { LockOutlined, MailFilled, MailOutlined, UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const AuthForm = ({ isLogin }) => {
-  const onFinish = () => {};
+  const onFinish = async (values) => {
+    if(isLogin) {
+
+    } else {
+      const response = await axios.post(`${import.meta.env.VITE_API}/register`, values);
+      console.log(response.data);
+    }
+  };
   return (
-    <div className="flex justify-center items-center h-[80vh] text-[#194F92]">
-      <div className="w-[350px] bg-[#ffffffe1] shadow px-10 py-4 rounded-md">
+    <div className="flex justify-center items-center h-[80vh] text-[#194F92] pt-8 2xl:mt-0">
+      <div className="w-[350px] bg-[#ffffffbb] shadow px-10 py-4 rounded-md">
         <h2 className="text-3xl font-semibold my-10">{isLogin ? "Login" : "Register"}</h2>
         <Form
           name="normal_login"
@@ -21,7 +29,7 @@ const AuthForm = ({ isLogin }) => {
                 !isLogin &&
                 <div className="mb-8">
           <Form.Item
-            name="username"
+            name="name"
             rules={[
               {
                 required: true,
@@ -31,7 +39,7 @@ const AuthForm = ({ isLogin }) => {
           >
             <Input
               prefix={<UserOutlined />}
-              placeholder="Username"
+              placeholder="Name"
             />
           </Form.Item>
           </div>
@@ -71,11 +79,11 @@ const AuthForm = ({ isLogin }) => {
           </div>
           <Form.Item>
             <div className="flex justify-between">
-              <Form.Item name="remember" valuePropName="checked" noStyle>
+              <Form.Item name="remember" noStyle>
                 <Checkbox>Remember me</Checkbox>
               </Form.Item>
 
-              <a className="login-form-forgot" href="">
+              <a>
                 Forgot password
               </a>
             </div>

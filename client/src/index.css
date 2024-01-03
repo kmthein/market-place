@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Playfair+Display:ital@1&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&family=Playfair+Display:ital,wght@0,600;1,400;1,500;1,600;1,700;1,800&family=Roboto+Condensed:wght@300;400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,15 +12,17 @@
   box-sizing: border-box;
   font-family: 'Inter', sans-serif;
 }
-body {
+.home {
   /* background: #FAFAFB; */
   /* background: #E5C0C8; */
   /* background: radial-gradient(#E5C0C8, #E5C0C8, #e0c9cd, #E5C0C8); */
-  background: url("https://images.unsplash.com/flagged/photo-1556637640-2c80d3201be8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background: url("https://images.unsplash.com/photo-1564584217132-2271feaeb3c5?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  height: 100vh;
   background-size: cover;
+  background-position: center;
 }
 .title-font {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Roboto', serif;
 }
 .shadow {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;

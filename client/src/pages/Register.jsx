@@ -3,9 +3,9 @@ import AuthForm from '../components/AuthForm'
 
 const Register = () => {
   return (
-    <>
+    <div className='home'>
         <AuthForm isLogin={false} />
-    </>
+    </div>
   )
 }
 
