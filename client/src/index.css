@@ -16,10 +16,10 @@
   /* background: #FAFAFB; */
   /* background: #E5C0C8; */
   /* background: radial-gradient(#E5C0C8, #E5C0C8, #e0c9cd, #E5C0C8); */
-  background: url("https://images.unsplash.com/photo-1564584217132-2271feaeb3c5?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background: url("https://images.unsplash.com/photo-1524532787116-e70228437bbe?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
   height: 100vh;
   background-size: cover;
-  background-position: center;
+  background-position: right;
 }
 .title-font {
   font-family: 'Roboto', serif;

@@ -14,8 +14,8 @@ const AuthForm = ({ isLogin }) => {
     }
   };
   return (
-    <div className="flex justify-center items-center h-[80vh] text-[#194F92] pt-8 2xl:mt-0">
-      <div className="w-[350px] bg-[#ffffffbb] shadow px-10 py-4 rounded-md">
+    <div className="flex justify-center items-center h-[80vh] pt-8 2xl:mt-0">
+      <div className="w-[350px] bg-[#ffffffe7] shadow px-10 py-4 rounded-md">
         <h2 className="text-3xl font-semibold my-10">{isLogin ? "Login" : "Register"}</h2>
         <Form
           name="normal_login"
