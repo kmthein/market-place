@@ -4,6 +4,7 @@ import Main from './layouts/Main'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Home from './pages/Home'
+import Index from './pages/profile/Index'
 
 const App = () => {
   const router = createBrowserRouter([
@@ -22,10 +23,13 @@ const App = () => {
         {
           path: "/register",
           element: <Register />
-        }
+        },
       ]
     },
-
+    {
+      path: "/profile",
+      element: <Index />
+    }
   ])
   return (
     <RouterProvider router={router} />

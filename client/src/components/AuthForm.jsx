@@ -6,7 +6,7 @@ import {
   MailOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { loginUser, registerUser } from "../api/auth";
 import { ThreeDots } from "react-loader-spinner";
@@ -14,14 +14,18 @@ import { ThreeDots } from "react-loader-spinner";
 const AuthForm = ({ isLogin }) => {
   const [submitting, setSubmitting] = useState(false);
 
+  const navigate = useNavigate();
+
   const onFinish = async (values) => {
     setSubmitting(true);
     if (isLogin) {
       try {
         const response = await loginUser(values);
         if (response.success) {
-          console.log(response);
           message.success(response.message);
+          console.log(response);
+          localStorage.setItem("token", response.token);
+          // navigate("/");
         } else {
           throw new Error(response.message);
         }
@@ -128,7 +132,7 @@ const AuthForm = ({ isLogin }) => {
           <div className="flex justify-center">
             {isLogin ? (
               <Form.Item>
-                <button className="bg-[#e9a1a4] hover:bg-[#ff9499e3] block h-10 w-16 rounded-md mx-auto">
+                <button className="bg-[#cf8e9c] hover:bg-[#df7e83e3] hover:-rotate-2 block h-10 w-16 rounded-md mx-auto">
                   {submitting ? (
                     <ThreeDots
                       visible={true}
@@ -155,7 +159,7 @@ const AuthForm = ({ isLogin }) => {
               </Form.Item>
             ) : (
               <Form.Item>
-                <button className="bg-[#e9a1a4] hover:bg-[#ff9499e3] block h-10 w-20 rounded-md mx-auto">
+                <button className="bg-[#cf8e9c] hover:bg-[#df7e83e3] block h-10 w-20 rounded-md mx-auto">
                 {submitting ? (
                     <ThreeDots
                       visible={true}
