@@ -1,16 +1,25 @@
 import React from "react";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, message } from "antd";
 import { LockOutlined, MailFilled, MailOutlined, UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { registerUser } from "../api/auth";
 
 const AuthForm = ({ isLogin }) => {
   const onFinish = async (values) => {
     if(isLogin) {
 
     } else {
-      const response = await axios.post(`${import.meta.env.VITE_API}/register`, values);
-      console.log(response.data);
+      try {
+        const response = await registerUser(values);
+        if(response.success) {
+          message.success(response.message)
+        } else {
+          throw new Error(response.message);
+        }       
+      } catch (error) {
+        message.error(error.message);
+      }
     }
   };
   return (

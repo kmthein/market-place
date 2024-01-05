@@ -6,14 +6,13 @@ const User = require("../models/user");
 exports.register = async (req, res, next) => {
   const errors = validationResult(req);
   if(!errors.isEmpty()) {
-    return res.status(400).json({
-      isSuccess: false,
-      message: errors.array()[0]
+    return res.status(409).json({
+      success: false,
+      message: errors.array()[0].msg
     })
   }
 
   const { name, email, password } = req.body;
-  console.log(req.body);
   try {
     const userDoc = await User.findOne({ email });
     if(userDoc) {
@@ -28,15 +27,40 @@ exports.register = async (req, res, next) => {
       password: hashedPassword
     })
     return res.status(201).json({
-      isSuccess: true,
+      success: true,
       message: "User created"
     })
-
   } catch (error) {
-    console.log(error);
-    return res.status(400).json({
-      isSuccess: false,
+    return res.status(409).json({
+      success: false,
       message: error.message
     })
   }
 };
+
+exports.login = async (req, res, next) => {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    return res.status(409).json({
+      success: false,
+      message: errors.array()[0].msg
+    })
+  }
+  const { email, password } = req.body; 
+  try {
+    const userDoc = await User.findOne({email}); 
+    if(!useDoc) {
+      throw new Error("Email is not found.");
+    } else {
+      const isMatch = await bcrypt.match(password, userDoc.password);
+    }
+    if(!isMatch) {
+      throw new Error("Wrong email or password.")
+    }
+  } catch (error) {
+    return res.status(409).json({
+      success: false,
+      message: error.message
+    })
+  }
+}
