@@ -1,5 +1,7 @@
 const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator")
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
  
 const User = require("../models/user");
 
@@ -49,13 +51,20 @@ exports.login = async (req, res, next) => {
   const { email, password } = req.body; 
   try {
     const userDoc = await User.findOne({email}); 
-    if(!useDoc) {
+    if(!userDoc) {
       throw new Error("Email is not found.");
     } else {
-      const isMatch = await bcrypt.match(password, userDoc.password);
-    }
-    if(!isMatch) {
-      throw new Error("Wrong email or password.")
+      const isMatch = await bcrypt.compare(password, userDoc.password);
+      if(!isMatch) {
+        throw new Error("Wrong email or password.")
+      } else {
+        const token = jwt.sign({ userId: userDoc._id }, process.env.JWT_KEY, {expiresIn: "1d"});
+        return res.status(200).json({
+          success: true,
+          message: "Logged in successfully.",
+          token
+        })
+      }
     }
   } catch (error) {
     return res.status(409).json({

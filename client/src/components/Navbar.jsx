@@ -1,7 +1,7 @@
 import React from "react";
 import { GiBasket } from "react-icons/gi";
 import { Link } from "react-router-dom";
-import { IoMdPerson } from "react-icons/io";
+import { IoPerson } from "react-icons/io5";
 
 const Navbar = ({ home }) => {
   return (
@@ -15,7 +15,7 @@ const Navbar = ({ home }) => {
         </div>
         <div className="pr-2">
           <Link to="/login">
-            <IoMdPerson className=" text-2xl hover:-translate-y-[2px] hover:text-[25px] duration-200 outline-none hover:text-[#353535]" />
+            <IoPerson className=" text-2xl hover:-translate-y-[2px] hover:text-[25px] duration-200 outline-none hover:text-[#353535]" />
           </Link>
         </div>
       </div>
