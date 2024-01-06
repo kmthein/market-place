@@ -27,7 +27,7 @@ const Index = () => {
     },
     {
       key: "3",
-      label: "Notfication",
+      label: "Notification",
       children: "Content of Tab Pane 3",
       icon: <IoMdNotificationsOutline className=" inline-block text-lg" />
     },

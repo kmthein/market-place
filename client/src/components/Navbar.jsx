@@ -26,7 +26,7 @@ const Navbar = ({home}) => {
   ];
 
   return (
-    <div className={` ${home ? "bg-[#EFEBEA]" : "white" }  py-4`}>
+    <div className={` ${home ? "bg-[#EFEBEA]" : "bg-[#EFEBEA]" }  py-4`}>
       <div className=" w-full px-60 flex justify-between items-center">
         <div className="flex items-end gap-3">
           <Link to="/">
