@@ -1,11 +1,25 @@
-import { Button, Checkbox, Col, Form, Input, Row, Select } from "antd";
+import { Button, Checkbox, Col, Form, Input, Row, Select, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import React from "react";
 import { MdOutlineSell } from "react-icons/md";
+import { sellProduct } from "../../api/product";
+import { useForm } from "antd/es/form/Form";
 
-const AddProduct = () => {
-  const onFinish = (values) => {
-    console.log(values);
+const AddProduct = ({ setActiveKey }) => {
+  const [form] = useForm();
+  const onFinish = async (values) => {
+    try {
+      const response = await sellProduct(values);
+      if(response.success) {
+        message.success(response.message);
+        form.resetFields();
+        setActiveKey("1");
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      message.error(error.message);
+    }
   };
 
   return (
@@ -14,7 +28,7 @@ const AddProduct = () => {
       <Form layout="vertical" name="sell_product" onFinish={onFinish}>
         <Form.Item
           label="Product Name"
-          name="product_name"
+          name="name"
           rules={[
             {
               required: true,
@@ -27,7 +41,7 @@ const AddProduct = () => {
         </Form.Item>
         <Form.Item
           label="Product Description"
-          name="product_description"
+          name="description"
           rules={[
             {
               required: true,
@@ -42,7 +56,7 @@ const AddProduct = () => {
           <Col span={8}>
             <Form.Item
               label="Price"
-              name="product_price"
+              name="price"
               rules={[
                 {
                   required: true,
@@ -57,7 +71,7 @@ const AddProduct = () => {
           <Col span={8}>
             <Form.Item
               label="Choose a category"
-              name="product_category"
+              name="category"
               rules={[
                 {
                   required: true,
@@ -135,7 +149,7 @@ const AddProduct = () => {
               ]}
               hasFeedback
             >
-              <Input placeholder="eg - 3 months ago" />
+              <Input placeholder="eg - 3 months" />
             </Form.Item>
           </Col>
         </Row>

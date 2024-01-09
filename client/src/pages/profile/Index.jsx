@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../../components/Navbar";
 import { Tabs } from "antd";
 import AddProduct from "./AddProduct";
@@ -6,9 +6,12 @@ import { IoPersonCircleOutline } from "react-icons/io5";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { MdOutlineAddCircleOutline } from "react-icons/md";
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
+import General from "./General";
 
 const Index = () => {
+  const [activeKey, setActiveKey] = useState("1");
   const onChange = (key) => {
+    setActiveKey(key);
   };
 
   const items = [
@@ -20,8 +23,8 @@ const Index = () => {
     },
     {
       key: "2",
-      label: "Add Product",
-      children: <AddProduct />,
+      label: "Sell Product",
+      children: <AddProduct setActiveKey={setActiveKey} />,
       icon: <MdOutlineAddCircleOutline className=" inline-block text-lg" />
     },
     {
@@ -33,7 +36,7 @@ const Index = () => {
     {
       key: "4",
       label: "Profile",
-      children: "Content of Tab Pane 4",
+      children: <General setActiveKey={setActiveKey} />,
       icon: <IoPersonCircleOutline className=" inline-block text-lg" />
     },
   ];
@@ -41,7 +44,7 @@ const Index = () => {
     <div>
       <Navbar home={false} />
       <div className=" h-screen pt-10">
-      <Tabs defaultActiveKey="1" items={items} tabPosition="left" onChange={onChange} className="xl:mx-[200px] 2xl:mx-[400px] bg-[#ffffff]" />
+      <Tabs activeKey={activeKey} items={items} tabPosition="left" onChange={onChange} className="xl:mx-[200px] 2xl:mx-[400px] bg-[#ffffff]" />
       </div>
     </div>
   );

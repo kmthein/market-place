@@ -5,12 +5,14 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 
 const userRoutes = require('./routes/user');
+const productRoutes = require("./routes/product");
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
 app.use(userRoutes);
+app.use(productRoutes);
 
 mongoose.connect(process.env.MONGO_URL).then(() => {
     app.listen(4000, () => {

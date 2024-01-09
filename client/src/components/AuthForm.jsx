@@ -11,7 +11,7 @@ import axios from "axios";
 import { loginUser, registerUser } from "../api/auth";
 import { ThreeDots } from "react-loader-spinner";
 import { useDispatch } from "react-redux";
-import { setUserId } from "../store/slices/userSlice";
+import { setUser } from "../store/slices/userSlice";
 
 const AuthForm = ({ isLogin }) => {
   const [submitting, setSubmitting] = useState(false);
@@ -28,7 +28,7 @@ const AuthForm = ({ isLogin }) => {
         if (response.success) {
           message.success(response.message);
           localStorage.setItem("token", response.token);
-          dispatch(setUserId(response.token));
+          dispatch(setUser({token: response.token, user: response.userDoc}));
           navigate("/");
         } else {
           throw new Error(response.message);

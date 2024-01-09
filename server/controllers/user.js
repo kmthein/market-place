@@ -58,13 +58,12 @@ exports.login = async (req, res, next) => {
       if(!isMatch) {
         throw new Error("Wrong email or password.")
       } else {
-        console.log(userDoc);
         const token = jwt.sign({ userId: userDoc._id }, process.env.JWT_KEY, {expiresIn: "1d"});
         return res.status(200).json({
           success: true,
           message: "Logged in successfully.",
           token,
-          userId: userDoc._id
+          userDoc
         })
       }
     }
