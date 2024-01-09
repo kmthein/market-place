@@ -75,3 +75,22 @@ exports.login = async (req, res, next) => {
     })
   }
 }
+
+exports.checkCurrentUser = async (req, res, next) => {
+  try {
+    const userDoc = await User.findById(req.userId);
+    if(!userDoc) {
+      throw new Error("Unauthorized.");
+    }
+    return res.status(200).json({
+      success: true,
+      message: "User authorized.",
+      userDoc
+    })
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: error.message
+    })
+  }
+}

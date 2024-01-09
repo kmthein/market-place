@@ -10,11 +10,15 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { loginUser, registerUser } from "../api/auth";
 import { ThreeDots } from "react-loader-spinner";
+import { useDispatch } from "react-redux";
+import { setUserId } from "../store/slices/userSlice";
 
 const AuthForm = ({ isLogin }) => {
   const [submitting, setSubmitting] = useState(false);
 
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const onFinish = async (values) => {
     setSubmitting(true);
@@ -23,9 +27,9 @@ const AuthForm = ({ isLogin }) => {
         const response = await loginUser(values);
         if (response.success) {
           message.success(response.message);
-          console.log(response);
           localStorage.setItem("token", response.token);
-          // navigate("/");
+          dispatch(setUserId(response.token));
+          navigate("/");
         } else {
           throw new Error(response.message);
         }

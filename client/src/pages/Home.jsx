@@ -4,14 +4,14 @@ const Home = () => {
   return (
     <>
       <div className=" home">
-        <div className="pt-[15%] px-60">
+        <div className="pt-[15%] xl:px-40 2xl:px-60">
           <h1 className="font-bold text-4xl 2xl:text-5xl">
             Easy to buy and sell 
           </h1>
           <h1 className="mt-4 font-bold text-4xl 2xl:text-5xl">
             your products in one place
           </h1>
-          <div className="mt-8 bg-white h-14 w-[38%] rounded-full flex items-center justify-between">
+          <div className="mt-8 bg-white h-14 md:w-[45%] 2xl:w-[38%] rounded-full flex items-center justify-between">
             <input
               type="text"
               placeholder="search"

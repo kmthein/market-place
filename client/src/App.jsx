@@ -5,6 +5,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Home from './pages/Home'
 import Index from './pages/profile/Index'
+import AuthProvider from './providers/AuthProvider'
 
 const App = () => {
   const router = createBrowserRouter([
@@ -28,7 +29,7 @@ const App = () => {
     },
     {
       path: "/profile",
-      element: <Index />
+      element: <AuthProvider><Index /></AuthProvider>
     }
   ])
   return (

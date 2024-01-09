@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { IoPerson } from "react-icons/io5";
 import { Dropdown, Space } from "antd";
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
 
 const Navbar = ({home}) => {
   const items = [
@@ -25,9 +26,12 @@ const Navbar = ({home}) => {
     },
   ];
 
+  const userId = useSelector(state => state.reducer);
+  console.log(userId);
+
   return (
     <div className={` ${home ? "bg-[#EFEBEA]" : "bg-[#EFEBEA]" }  py-4`}>
-      <div className=" w-full px-60 flex justify-between items-center">
+      <div className=" w-full xl:px-40 2xl:px-60 flex justify-between items-center">
         <div className="flex items-end gap-3">
           <Link to="/">
             <h3 className="text-3xl font-extrabold hover:-translate-y-[2px] duration-200 outline-none hover:text-[#353535]">
@@ -37,7 +41,7 @@ const Navbar = ({home}) => {
           <GiBasket className="text-3xl mb-1" />
         </div>
         {
-          localStorage.getItem("token")  ? (
+          userId  ? (
             <Link to="/profile" className="flex items-center gap-1">
               <UserOutlined className="text-xl" />
             </Link>

@@ -9,7 +9,6 @@ import { MdOutlineProductionQuantityLimits } from "react-icons/md";
 
 const Index = () => {
   const onChange = (key) => {
-    console.log(key);
   };
 
   const items = [
@@ -42,7 +41,7 @@ const Index = () => {
     <div>
       <Navbar home={false} />
       <div className=" h-screen pt-10">
-      <Tabs defaultActiveKey="1" items={items} tabPosition="left" onChange={onChange} className="mx-[400px] bg-[#ffffff]" />
+      <Tabs defaultActiveKey="1" items={items} tabPosition="left" onChange={onChange} className="xl:mx-[200px] 2xl:mx-[400px] bg-[#ffffff]" />
       </div>
     </div>
   );
