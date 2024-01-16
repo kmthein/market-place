@@ -11,7 +11,7 @@ const AddProduct = ({ setActiveKey }) => {
     try {
       const response = await sellProduct(values);
       if(response.success) {
-        message.success(response.message);
+        message.success("Product is added successfully.");
         form.resetFields();
         setActiveKey("1");
       } else {
@@ -24,7 +24,7 @@ const AddProduct = ({ setActiveKey }) => {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold mb-4">What you want to sell?</h1>
+      <h1 className="text-lg font-semibold mb-4">What you want to sell?</h1>
       <Form layout="vertical" name="sell_product" onFinish={onFinish}>
         <Form.Item
           label="Product Name"

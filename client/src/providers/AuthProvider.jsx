@@ -9,7 +9,6 @@ const AuthProvider = ({ children }) => {
         try {
             const response = await checkCurrentUser();
             if(response.success) {
-                console.log(response);
             } else {
                 navigate("/");        
                 throw new Error(response.message);

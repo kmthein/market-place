@@ -6,7 +6,7 @@ const General = () => {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold mb-4">Personal Information</h1>
+      <h1 className="text-lg font-semibold mb-4">Personal Information</h1>
       <div className="mb-4">
         <span className="font-semibold">Name: </span>
         <span className="ml-2">{user?.name}</span>

@@ -30,4 +30,6 @@ router.post("/create-product", [
         .withMessage("product used time is required."),
 ], authMiddleware, productController.sellProduct);
 
+router.get("/products", authMiddleware, productController.getProducts);
+
 module.exports = router;

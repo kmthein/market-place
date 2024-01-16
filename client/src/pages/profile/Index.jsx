@@ -7,6 +7,7 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import { MdOutlineAddCircleOutline } from "react-icons/md";
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
 import General from "./General";
+import Products from "./Products";
 
 const Index = () => {
   const [activeKey, setActiveKey] = useState("1");
@@ -18,7 +19,7 @@ const Index = () => {
     {
       key: "1",
       label: "Products",
-      children: "Content of Tab Pane 1",
+      children: <Products activeKey={activeKey} />,
       icon: <MdOutlineProductionQuantityLimits className=" inline-block text-lg" />
     },
     {

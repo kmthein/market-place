@@ -23,14 +23,33 @@ exports.sellProduct = async (req, res, next) => {
       seller: req.userId,
     });
     return res.status(201).json({
-        success: true,
-        message: "Product is created.",
-        productDoc
-    })
+      success: true,
+      message: "Product is created.",
+      productDoc,
+    });
   } catch (error) {
     return res.status(422).json({
-        success: false,
-        message: error.message,
-      });
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.getProducts = async (req, res) => {
+  try {
+    const productDocs = await Product.find({ seller: req.userId });
+    if (!productDocs) {
+      throw new Error("Product Not Found.");
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Products found.",
+      productDocs,
+    });
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
