@@ -32,4 +32,10 @@ router.post("/create-product", [
 
 router.get("/products", authMiddleware, productController.getProducts);
 
+router.get("/products/:id", authMiddleware, productController.getProductDetail);
+
+router.post("/update-product", authMiddleware, productController.updateProduct);
+
+router.delete("/delete/:id", authMiddleware, productController.deleteProduct);
+
 module.exports = router;

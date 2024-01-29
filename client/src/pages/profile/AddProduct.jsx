@@ -1,17 +1,29 @@
 import { Button, Checkbox, Col, Form, Input, Row, Select, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MdOutlineSell } from "react-icons/md";
-import { sellProduct } from "../../api/product";
-import { useForm } from "antd/es/form/Form";
+import { getProductDetail, sellProduct, updateProduct } from "../../api/product";
 
-const AddProduct = ({ setActiveKey }) => {
-  const [form] = useForm();
+const AddProduct = ({ setActiveKey, editMode, oldProductId }) => {
+  const [form] = Form.useForm();
+  const [sellerId, setSellerId] = useState(null);
+  const [productId, setProductId] = useState(null);
+
   const onFinish = async (values) => {
     try {
-      const response = await sellProduct(values);
-      if(response.success) {
-        message.success("Product is added successfully.");
+      let response;
+      let msg;
+      if(editMode) {
+        values.sellerId = sellerId;
+        values._id = productId;
+        response = await updateProduct(values);
+        msg = "Product updated successfully.";
+      } else {
+        response = await sellProduct(values);
+        msg = "Product is added successfully.";
+      }
+      if (response.success) {
+        message.success(msg);
         form.resetFields();
         setActiveKey("1");
       } else {
@@ -22,10 +34,43 @@ const AddProduct = ({ setActiveKey }) => {
     }
   };
 
+  const getProductDetailHandler = async () => {
+    const response = await getProductDetail(oldProductId);
+    console.log(response.productDoc);
+    const { name, description, price, category, used_for, product_has, seller, _id } =
+      response.productDoc;
+    setSellerId(seller)
+    setProductId(_id);
+    const modifiedProduct = {
+      name,
+      description,
+      price,
+      category,
+      used_for,
+      product_has,
+    };
+    form.setFieldsValue(modifiedProduct);
+  };
+
+  useEffect(() => {
+    if (editMode) {
+      getProductDetailHandler();
+    } else {
+      form.resetFields();
+    }
+  }, [editMode]);
+
   return (
     <div>
-      <h1 className="text-lg font-semibold mb-4">What you want to sell?</h1>
-      <Form layout="vertical" name="sell_product" onFinish={onFinish}>
+      <h1 className="text-lg font-semibold mb-4">
+        {editMode ? "Edit your product" : "What you want to sell?"}
+      </h1>
+      <Form
+        layout="vertical"
+        name="sell_product"
+        onFinish={onFinish}
+        form={form}
+      >
         <Form.Item
           label="Product Name"
           name="name"
@@ -153,10 +198,7 @@ const AddProduct = ({ setActiveKey }) => {
             </Form.Item>
           </Col>
         </Row>
-        <Form.Item
-          label="This product has"
-          name="product_has"
-        >
+        <Form.Item label="This product has" name="product_has">
           <Checkbox.Group
             options={[
               {
@@ -175,12 +217,25 @@ const AddProduct = ({ setActiveKey }) => {
             defaultValue={[""]}
           />
         </Form.Item>
-      <Form.Item>
-        <button type="submit" className="bg-[#4254b6] text-white hover:bg-[#374699] hover:-rotate-2 hover:text-gray-200 flex font-medium h-10 px-2 gap-1 items-center ml-auto rounded-md">
-          <MdOutlineSell className="text-lg" />
-          Sell
-        </button>
-      </Form.Item>
+        <Form.Item>
+          {editMode ? (
+            <button
+              type="submit"
+              className="bg-[#4254b6] text-white hover:bg-[#374699] hover:-rotate-2 hover:text-gray-200 flex font-medium h-10 px-2 gap-1 items-center ml-auto rounded-md"
+            >
+              <MdOutlineSell className="text-lg" />
+              Update
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="bg-[#4254b6] text-white hover:bg-[#374699] hover:-rotate-2 hover:text-gray-200 flex font-medium h-10 px-2 gap-1 items-center ml-auto rounded-md"
+            >
+              <MdOutlineSell className="text-lg" />
+              Sell
+            </button>
+          )}
+        </Form.Item>
       </Form>
     </div>
   );
