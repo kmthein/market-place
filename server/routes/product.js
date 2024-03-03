@@ -38,4 +38,6 @@ router.post("/update-product", authMiddleware, productController.updateProduct);
 
 router.delete("/delete/:id", authMiddleware, productController.deleteProduct);
 
+router.post("/upload", authMiddleware, productController.uploadImage);
+
 module.exports = router;

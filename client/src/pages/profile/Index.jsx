@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import Navbar from "../../components/Navbar";
 import { Form, Tabs } from "antd";
-import AddProduct from "./AddProduct";
+import AddProduct from "./ManageProduct";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { MdOutlineAddCircleOutline } from "react-icons/md";
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
 import General from "./General";
 import Products from "./Products";
+import ManageProduct from "./ManageProduct";
 
 const Index = () => {
   const [activeKey, setActiveKey] = useState("1");
@@ -43,7 +44,7 @@ const Index = () => {
     {
       key: "2",
       label: "Sell Product",
-      children: <AddProduct setActiveKey={setActiveKey} editMode={editMode} oldProductId={oldProductId} />,
+      children: <ManageProduct setActiveKey={setActiveKey} editMode={editMode} oldProductId={oldProductId} />,
       icon: <MdOutlineAddCircleOutline className=" inline-block text-lg" />
     },
     {
@@ -59,6 +60,7 @@ const Index = () => {
       icon: <IoPersonCircleOutline className=" inline-block text-lg" />
     },
   ];
+  
   return (
     <div>
       <Navbar home={false} />
