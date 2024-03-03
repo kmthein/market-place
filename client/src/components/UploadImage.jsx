@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Modal, Upload, message } from "antd";
 import Button from "./Button";
 import { FaPlus } from "react-icons/fa";
 import { FaTrashAlt } from "react-icons/fa";
-import { uploadImage } from "../api/product";
+import { deleteSavedImage, getSavedImages, uploadImage } from "../api/product";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -52,6 +52,24 @@ const UploadImage = ({ oldProductId, setActiveKey }) => {
 
   const [previewImg, setPreviewImg] = useState([]);
   const [images, setImages] = useState([]);
+  const [savedImages, setSavedImages] = useState([]);
+
+  const getImages = async (id) => {
+    try {
+      const response = await getSavedImages(id);
+      if(response.success) {
+        setSavedImages(response.data.images);
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      message.error(err.message);
+    }
+  }
+
+  useEffect(() => {
+    getImages(oldProductId);
+  }, [images])
 
   const onChangeHandler = (e) => {
     const selectedImages = e.target.files;
@@ -77,6 +95,9 @@ const UploadImage = ({ oldProductId, setActiveKey }) => {
       if (response.success) {
         message.success(response.message);
         setActiveKey("1");
+        setPreviewImg([]);
+        setImages([]);
+        setSavedImages([]);
       } else {
         throw new Error(response.message);
       }
@@ -96,6 +117,20 @@ const UploadImage = ({ oldProductId, setActiveKey }) => {
     URL.revokeObjectURL(img);
     }
   };
+
+  const deleteSavedImgHandler = async (img) => {
+    setSavedImages((prev) => prev.filter((e) => e != img));
+    try {
+      const response = await deleteSavedImage({productId: oldProductId, imgToDelete: img});
+      if(response.success) {
+        message.success(response.message);
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      message.error(err.message);
+    }
+  }
 
   return (
     <>
@@ -123,6 +158,24 @@ const UploadImage = ({ oldProductId, setActiveKey }) => {
           src={previewImage}
         />
       </Modal> */}
+        <div className=" flex gap-2 mt-4 mb-4">
+      {
+        savedImages && savedImages.length > 0 &&
+        savedImages.map((img, index) => (
+          <div className=" h-32 relative" key={index}>
+                <img
+                  src={img}
+                  key={index}
+                  className="w-full h-full object-contain rounded-md"
+                />
+                <FaTrashAlt
+                  onClick={() => deleteSavedImgHandler(img)}
+                  className="z-50 absolute bottom-2 right-2 text-red-500 text-md cursor-pointer"
+                />
+              </div>
+        ))
+      }
+      </div>
         <label htmlFor="upload">
           <div className=" border-[2px] border-dashed rounded-md w-[300px] flex items-center h-[100px]">
             <FaPlus className="mx-auto text-xl cursor-pointer text-black/50 hover:text-black/70 hover:text-[1.3rem]" />
@@ -140,15 +193,15 @@ const UploadImage = ({ oldProductId, setActiveKey }) => {
         <div className=" flex gap-2 mt-4">
           {previewImg &&
             previewImg.map((img, index) => (
-              <div className=" basis-1/6 h-32 relative">
+              <div className=" h-32 relative" key={index}>
                 <img
                   src={img}
                   key={index}
-                  className="w-full h-full object-cover rounded-md"
+                  className="w-full h-full object-contain rounded-md"
                 />
                 <FaTrashAlt
                   onClick={() => deleteHandler(img)}
-                  className="z-50 absolute bottom-2 right-2 text-red-500 text-md cursor-pointer"
+                  className="z-50 absolute bottom-2 right-4 text-red-500 text-md cursor-pointer"
                 />
               </div>
             ))}

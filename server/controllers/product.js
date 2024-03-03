@@ -174,12 +174,13 @@ exports.uploadImage = (req, res) => {
             await Product.findByIdAndUpdate(productId, {
               $push: { images: secureUrlArray }
             })
+            return res.status(200).json({
+              success: true,
+              message: "Product images saved.",
+              secureUrlArray
+            })
           }
-          return res.status(200).json({
-            success: true,
-            message: "Product images saved.",
-            secureUrlArray
-          })
+
         } else {
           throw new Error("Cloud upload failed.");
         }
@@ -191,4 +192,45 @@ exports.uploadImage = (req, res) => {
       message: error.message
     })
   }
+}
+
+exports.getSavedImages = (req, res) => {
+  const {id} = req.params;
+  return Product.findById(id).select("images").then((productImg) => {
+    return res.status(200).json({
+      success: true,
+      message: "Product images found.",
+      data: productImg
+    })   
+  }).catch((error) => {
+    return res.status(401).json({
+      success: false,
+      message: error.message
+    })
+  });
+}
+
+exports.deleteSavedImage = async (req, res) => {
+  try {
+    const { productId, imgToDelete } = req.params;
+    const decodeImgUrl = decodeURIComponent(imgToDelete)
+    const productDoc = await Product.findByIdAndUpdate(productId, {$pull: {images: decodeImgUrl}});
+    const publicId = decodeImgUrl.substring(decodeImgUrl.lastIndexOf("/") + 1, decodeImgUrl.lastIndexOf("."));
+    await cloudinary.uploader.destroy(publicId);
+    if(productDoc) {
+      return res.status(200).json({
+        success: true,
+        message: "Image removed."
+      })    
+    } else {
+      throw new Error("Image not found.");
+    }
+
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: error.message
+    })
+  }
+
 }
