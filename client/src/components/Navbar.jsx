@@ -18,9 +18,16 @@ const Navbar = ({ home }) => {
     {
       key: "1",
       label: (
-        <Link to="/profile" className="flex items-center gap-1">
-          <span>My Profile</span>
-        </Link>
+          user.role == "admin" ? (
+            <Link to="/admin" className="flex items-center gap-1">
+            <span>Admin Panel</span>
+          </Link>
+          ) : (
+            <Link to="/profile" className="flex items-center gap-1">
+            <span>My Profile</span>
+          </Link>
+          )
+
       ),
     },
     {

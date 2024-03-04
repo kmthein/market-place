@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { Form, Tabs } from "antd";
-import AddProduct from "./ManageProduct";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { MdOutlineAddCircleOutline } from "react-icons/md";
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
-import General from "./General";
+import Users from "./Users";
 import Products from "./Products";
-import ManageProduct from "./ManageProduct";
+import General from "./General";
+import { getAllProducts } from "../../api/admin";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -17,17 +17,19 @@ const Index = () => {
   const [editMode, setEditMode] = useState(false);
   const [oldProductId, setOldProductId] = useState(null);
 
+  const [products, setProducts] = useState([]);
+
   const [form] = Form.useForm();
   const onChange = (key) => {
     setActiveKey(key);
     setEditMode(false);
   };
 
-  const getProductsHandler = async () => {
+  const getAllProductsHandler = async () => {
     try {
-      const response = await getProducts();
+      const response = await getAllProducts();
       if (response.success) {
-        setProducts(response.productDocs);
+        setProducts(response.data);
       } else {
         throw new Error(response.message);
       }
@@ -40,27 +42,28 @@ const Index = () => {
 
   const navigate = useNavigate();
 
-  const isNotUser = () => {
-    if(user.role == "admin") {
+  const isAdmin = () => {
+    if(user.role != "admin") {
         navigate("/");
     }
   }
-
+  
   useEffect(() => {
-    isNotUser();
+    isAdmin();
+    getAllProductsHandler();
   }, [activeKey])
 
   const items = [
     {
       key: "1",
-      label: "Products",
-      children: <Products activeKey={activeKey} setActiveKey={setActiveKey} setEditMode={setEditMode} setOldProductId={setOldProductId} getProductsHandler={getProductsHandler} />,
+      label: "Manage Products",
+      children: <Products products={products} />,
       icon: <MdOutlineProductionQuantityLimits className=" inline-block text-lg" />
     },
     {
       key: "2",
-      label: "Sell Product",
-      children: <ManageProduct setActiveKey={setActiveKey} editMode={editMode} oldProductId={oldProductId} />,
+      label: "Manage Users",
+      children: <Users />,
       icon: <MdOutlineAddCircleOutline className=" inline-block text-lg" />
     },
     {

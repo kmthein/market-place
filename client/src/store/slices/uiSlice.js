@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  isLoading: false,
+  isProcessing: false,
 };
 
 const uiSlice = createSlice({
@@ -9,10 +9,10 @@ const uiSlice = createSlice({
   initialState,
   reducers: {
     setLoading: (state, action) => {
-      state.isLoading = true;
+      state.isProcessing = true;
     },
     endLoading: (state, action) => {
-      state.isLoading = false;
+      state.isProcessing = false;
     },
   },
 });

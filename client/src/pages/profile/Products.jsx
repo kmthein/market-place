@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { deleteProduct, getProductDetail, getProducts } from "../../api/product";
 import moment from "moment";
 import { Form, message } from "antd";
-import axios from "axios";
 
 const Products = ({ activeKey, setActiveKey, setEditMode, setOldProductId }) => {
   const [products, setProducts] = useState();

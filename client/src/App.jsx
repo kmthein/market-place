@@ -5,6 +5,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Home from './pages/Home'
 import Index from './pages/profile/Index'
+import AdminIndex from './pages/admin/Index'
 import AuthProvider from './providers/AuthProvider'
 
 const App = () => {
@@ -30,6 +31,10 @@ const App = () => {
     {
       path: "/profile",
       element: <AuthProvider><Index /></AuthProvider>
+    },
+    {
+      path: "/admin",
+      element: <AuthProvider><AdminIndex /></AuthProvider>
     }
   ])
   return (
