@@ -18,6 +18,9 @@ import {
 } from "react-icons/md";
 import { getProductDetail, sellProduct, updateProduct } from "../api/product";
 import UploadImage from "./UploadImage";
+import SubmitButton from "./SubmitButton";
+import { useDispatch } from "react-redux";
+import { endLoading, setLoading } from "../store/slices/uiSlice";
 
 const ProductForm = ({ setActiveKey, editMode, oldProductId }) => {
   const [form] = Form.useForm();
@@ -26,7 +29,10 @@ const ProductForm = ({ setActiveKey, editMode, oldProductId }) => {
 
   const [productActiveKey, setProductActiveKey] = useState("1");
 
+  const dispatch = useDispatch();
+
   const onFinish = async (values) => {
+    dispatch(setLoading());
     try {
       let response;
       let msg;
@@ -49,6 +55,7 @@ const ProductForm = ({ setActiveKey, editMode, oldProductId }) => {
     } catch (error) {
       message.error(error.message);
     }
+    dispatch(endLoading());
   };
 
   const getProductDetailHandler = async () => {
@@ -247,21 +254,16 @@ const ProductForm = ({ setActiveKey, editMode, oldProductId }) => {
             </Form.Item>
             <Form.Item>
               {editMode ? (
-                <button
-                  type="submit"
-                  className="bg-[#4254b6] text-white hover:bg-[#374699] hover:-rotate-2 hover:text-gray-200 flex font-medium h-10 px-2 gap-1 items-center ml-auto rounded-md"
+                <SubmitButton
                 >
                   <MdOutlineSell className="text-lg" />
                   Update
-                </button>
+                </SubmitButton>
               ) : (
-                <button
-                  type="submit"
-                  className="bg-[#4254b6] text-white hover:bg-[#374699] hover:-rotate-2 hover:text-gray-200 flex font-medium h-10 px-2 gap-1 items-center ml-auto rounded-md"
-                >
+                <SubmitButton>
                   <MdOutlineSell className="text-lg" />
                   Sell
-                </button>
+                </SubmitButton>
               )}
             </Form.Item>
           </Form>
