@@ -17,6 +17,10 @@ const userSchema = new Schema({
     role: {
         type: String,
         default: "user"
+    }, 
+    status: {
+        type: String,
+        default: "active"
     }
 }, {
     timestamps: true

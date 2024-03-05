@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { deleteProduct, getProductDetail, getProducts } from "../../api/product";
+import {
+  deleteProduct,
+  getProductDetail,
+  getProducts,
+} from "../../api/product";
 import moment from "moment";
 import { Form, message } from "antd";
 
-const Products = ({ activeKey, setActiveKey, setEditMode, setOldProductId }) => {
+const Products = ({
+  activeKey,
+  setActiveKey,
+  setEditMode,
+  setOldProductId,
+}) => {
   const [products, setProducts] = useState();
 
   const getProductsHandler = async () => {
@@ -30,9 +39,9 @@ const Products = ({ activeKey, setActiveKey, setEditMode, setOldProductId }) => 
   };
 
   const deleteHandler = async (id) => {
-    const response = await deleteProduct(id); 
+    const response = await deleteProduct(id);
     try {
-      if(response.success) {
+      if (response.success) {
         message.success(response.message);
         getProductsHandler();
         setActiveKey("1");
@@ -42,8 +51,7 @@ const Products = ({ activeKey, setActiveKey, setEditMode, setOldProductId }) => 
     } catch (error) {
       message.error(error.message);
     }
-
-  }
+  };
 
   return (
     <div>
@@ -87,13 +95,19 @@ const Products = ({ activeKey, setActiveKey, setEditMode, setOldProductId }) => 
                     {moment(product.createdAt).format("MMM Do YY")}
                   </td>
                   <td className="px-6 py-4">
-                    {product.status == "pending" ? (
+                    {product.status == "pending" && (
                       <span className="bg-yellow-300 p-1 rounded-md text-black/80 text-sm">
                         pending
                       </span>
-                    ) : (
+                    )}
+                    {product.status == "approved" && (
                       <span className="bg-green-500 p-1 rounded-md text-black/80 text-sm">
                         approved
+                      </span>
+                    )}
+                    {product.status == "rejected" && (
+                      <span className="bg-red-400 p-1 rounded-md text-black/80 text-sm">
+                        rejected
                       </span>
                     )}
                   </td>

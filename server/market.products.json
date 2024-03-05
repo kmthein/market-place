@@ -1,0 +1,85 @@
+[{
+  "_id": {
+    "$oid": "659d97ee2b2761c3cac292eb"
+  },
+  "name": "TCL TV",
+  "description": "venenatis aptent pharetra ligula lacinia nisi fringilla, sociis mauris curabitur semper posuere vel. Rutrum habitant dapibus sociis condimentum",
+  "price": "300",
+  "category": "electronics",
+  "used_for": "1 year",
+  "product_has": [
+    "warranty",
+    "accessories"
+  ],
+  "status": "pending",
+  "seller": {
+    "$oid": "659d5b8915fac5a4ab97c833"
+  },
+  "createdAt": {
+    "$date": "2024-01-09T19:01:02.434Z"
+  },
+  "updatedAt": {
+    "$date": "2024-03-05T16:14:41.168Z"
+  },
+  "__v": 3,
+  "images": [
+    "https://res.cloudinary.com/dvos6jlbp/image/upload/v1709494696/tyq6mrgurddvyphavjhz.png",
+    "https://res.cloudinary.com/dvos6jlbp/image/upload/v1709494696/fx4orbjiuwrz6f5kyjaf.png"
+  ]
+},
+{
+  "_id": {
+    "$oid": "659e8762d28bac04ce9adb69"
+  },
+  "name": "Iphone 14",
+  "description": "fringilla penatibus tristique hac egestas taciti sed vehicula venenatis arcu, ligula himenaeos libero sociis ante aptent potenti sodales. Sem conubia nascetur per torquent lobortis himenaeos cursus montes suspendisse, in lectus arcu placerat dis dapibus odio",
+  "price": "800",
+  "category": "electronics",
+  "used_for": "5 months",
+  "product_has": [
+    "warranty",
+    "voucher"
+  ],
+  "status": "rejected",
+  "seller": {
+    "$oid": "659e83d52e7c97205f8f8efe"
+  },
+  "createdAt": {
+    "$date": "2024-01-10T12:02:42.513Z"
+  },
+  "updatedAt": {
+    "$date": "2024-03-05T16:11:47.668Z"
+  },
+  "__v": 1,
+  "images": [
+    "https://res.cloudinary.com/dvos6jlbp/image/upload/v1709638837/hs6prb4knyupuevneby8.jpg"
+  ]
+},
+{
+  "_id": {
+    "$oid": "65e4c115e9ff266ee684121e"
+  },
+  "name": "Iphone 12 Pro Max",
+  "description": "The iPhone 12 Pro Max has a 6.7-inch screen (slightly larger than the 6.5\" on the iPhone 11 Pro Max), and its base price is set at $1,100.",
+  "price": "800",
+  "category": "electronics",
+  "used_for": "2 years",
+  "product_has": [
+    "accessories"
+  ],
+  "images": [
+    "https://res.cloudinary.com/dvos6jlbp/image/upload/v1709490760/lvlkrqblirhtju2rzfpk.jpg",
+    "https://res.cloudinary.com/dvos6jlbp/image/upload/v1709493952/psekwqtsjdroxunrylct.jpg"
+  ],
+  "status": "approved",
+  "seller": {
+    "$oid": "659d5b8915fac5a4ab97c833"
+  },
+  "createdAt": {
+    "$date": "2024-03-03T18:27:33.728Z"
+  },
+  "updatedAt": {
+    "$date": "2024-03-05T16:10:49.971Z"
+  },
+  "__v": 0
+}]

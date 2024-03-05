@@ -56,6 +56,8 @@ const UploadImage = ({ oldProductId, setActiveKey }) => {
   const [images, setImages] = useState([]);
   const [savedImages, setSavedImages] = useState([]);
 
+  const [imgCount, setImgCount] = useState(0);
+
   const getImages = async (id) => {
     try {
       const response = await getSavedImages(id);
@@ -78,11 +80,14 @@ const UploadImage = ({ oldProductId, setActiveKey }) => {
     const selectedImagesArray = Array.from(selectedImages);
     setImages((prev) => [...prev, ...selectedImagesArray]);
 
+    setImgCount((prev) => prev + selectedImagesArray.length);
+
     const previewImagesArray = selectedImagesArray.map((img) => {
       return URL.createObjectURL(img);
     });
     setPreviewImg((prev) => prev.concat(previewImagesArray));
   };
+
 
   const dispatch = useDispatch();
   const uploadSubmitHandler = async (e) => {
@@ -116,6 +121,7 @@ const UploadImage = ({ oldProductId, setActiveKey }) => {
     const updatedSelectedImg = [...images];
     updatedSelectedImg.splice(indexToDelete, 1);
 
+    setImgCount((prev) => prev - 1);
     setImages(updatedSelectedImg);
     setPreviewImg(previewImg.filter((e) => e != img));
     URL.revokeObjectURL(img);
@@ -211,7 +217,14 @@ const UploadImage = ({ oldProductId, setActiveKey }) => {
             ))}
         </div>
         <div className="mt-4">
-          <SubmitButton>Upload</SubmitButton>
+          {
+            imgCount >= 1 && (
+              <SubmitButton>
+                Upload
+              </SubmitButton>
+            )
+          }
+
         </div>
       </form>
     </>
