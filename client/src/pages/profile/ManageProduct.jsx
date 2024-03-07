@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ProductForm from "../../components/ProductForm";
+import ProductForm from "../../components/Product/ProductForm";
 
 const ManageProduct = ({ setActiveKey, editMode, oldProductId }) => {
 

@@ -45,7 +45,7 @@ exports.sellProduct = async (req, res, next) => {
 
 exports.getProducts = async (req, res) => {
   try {
-    const productDocs = await Product.find({ seller: req.userId });
+    const productDocs = await Product.find({ seller: req.userId }).sort({createdAt: -1});
     if (!productDocs) {
       throw new Error("Product Not Found.");
     }
@@ -232,5 +232,24 @@ exports.deleteSavedImage = async (req, res) => {
       message: error.message
     })
   }
+}
 
+exports.getApprovedProducts = async (req, res) => {
+  try {
+    const productDoc = await Product.find({ status: "approved" });
+    if(productDoc) {
+      return res.status(200).json({
+        success: true,
+        data: productDoc
+      })  
+    } else {
+      throw new Error("Product not found.");
+    }
+
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: error.message
+    })
+  }
 }

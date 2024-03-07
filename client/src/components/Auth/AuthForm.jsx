@@ -8,10 +8,10 @@ import {
 } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { loginUser, registerUser } from "../api/auth";
+import { loginUser, registerUser } from "../../api/auth";
 import { ThreeDots } from "react-loader-spinner";
 import { useDispatch } from "react-redux";
-import { setUser } from "../store/slices/userSlice";
+import { setUser } from "../../store/slices/userSlice";
 
 const AuthForm = ({ isLogin }) => {
   const [submitting, setSubmitting] = useState(false);

@@ -1,12 +1,12 @@
 import React from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Main from './layouts/Main'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import Home from './pages/Home'
 import Index from './pages/profile/Index'
 import AdminIndex from './pages/admin/Index'
 import AuthProvider from './providers/AuthProvider'
+import Login from './pages/auth/Login'
+import Register from './pages/auth/Register'
+import Home from './pages/home/Home'
 
 const App = () => {
   const router = createBrowserRouter([

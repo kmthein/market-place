@@ -62,7 +62,7 @@ const Navbar = ({ home }) => {
 
   return (
     <div className={` ${home ? "bg-[#EFEBEA]" : "bg-[#EFEBEA]"}  py-4`}>
-      <div className=" w-full xl:px-40 2xl:px-60 flex justify-between items-center">
+      <div className=" w-full xl:px-[200px] flex justify-between items-center">
         <div className="flex items-end gap-3">
           <Link to="/">
             <h3 className="text-3xl font-extrabold hover:-translate-y-[2px] duration-200 outline-none hover:text-[#353535]">

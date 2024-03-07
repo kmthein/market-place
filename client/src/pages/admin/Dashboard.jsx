@@ -23,10 +23,9 @@ const Dashboard = ({ products, users }) => {
     setTotalProducts(products.length);
   }, [products])
 
-console.log(users);
   return (
     <div className="py-2">
-      <div className="flex">
+      <div className="flex gap-2">
         <CustomCard
           title={"Total Sales"}
           count={`$${totalSales}`}
@@ -47,10 +46,10 @@ console.log(users);
         />
       </div>
       <div className="mx-4 mt-4 border rounded-md p-4">
-        <CustomAreaChart />
+        <CustomAreaChart products={products} />
       </div>
       <div className="mx-4 mt-4">
-        <CustomBarList />
+        <CustomBarList products={products} />
       </div>
     </div>
   );

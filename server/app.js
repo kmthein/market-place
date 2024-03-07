@@ -27,6 +27,7 @@ const storageConfigure = multer.diskStorage({
 const userRoutes = require("./routes/user");
 const productRoutes = require("./routes/product");
 const adminRoutes = require("./routes/admin");
+const publicRoutes = require("./routes/public");
 
 const app = express();
 
@@ -42,6 +43,7 @@ app.use(
 app.use(userRoutes);
 app.use(productRoutes);
 app.use(adminRoutes);
+app.use("/api", publicRoutes);
 
 mongoose.connect(process.env.MONGO_URL).then(() => {
   app.listen(4000);

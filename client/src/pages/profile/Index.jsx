@@ -81,7 +81,7 @@ const Index = () => {
     <div>
       <Navbar home={false} />
       <div className=" h-screen pt-10">
-      <Tabs activeKey={activeKey} items={items} tabPosition="left" onChange={onChange} className="xl:mx-[200px] 2xl:mx-[300px] bg-[#ffffff]" />
+      <Tabs activeKey={activeKey} items={items} tabPosition="left" onChange={onChange} className="xl:mx-[200px] bg-[#ffffff]" />
       </div>
     </div>
   );

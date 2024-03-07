@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Modal, Upload, message } from "antd";
-import SubmitButton from "./SubmitButton";
+import SubmitButton from "../SubmitButton";
 import { FaPlus } from "react-icons/fa";
 import { FaTrashAlt } from "react-icons/fa";
-import { deleteSavedImage, getSavedImages, uploadImage } from "../api/product";
+import { deleteSavedImage, getSavedImages, uploadImage } from "../../api/product";
 import { useDispatch } from "react-redux";
-import { endLoading, setLoading } from "../store/slices/uiSlice";
+import { endLoading, setLoading } from "../../store/slices/uiSlice";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {

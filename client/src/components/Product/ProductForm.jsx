@@ -16,11 +16,11 @@ import {
   MdOutlineProductionQuantityLimits,
   MdOutlineSell,
 } from "react-icons/md";
-import { getProductDetail, sellProduct, updateProduct } from "../api/product";
+import { getProductDetail, sellProduct, updateProduct } from "../../api/product";
 import UploadImage from "./UploadImage";
-import SubmitButton from "./SubmitButton";
+import SubmitButton from "../SubmitButton";
 import { useDispatch } from "react-redux";
-import { endLoading, setLoading } from "../store/slices/uiSlice";
+import { endLoading, setLoading } from "../../store/slices/uiSlice";
 
 const ProductForm = ({ setActiveKey, editMode, oldProductId }) => {
   const [form] = Form.useForm();

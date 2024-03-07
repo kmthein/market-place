@@ -1,5 +1,6 @@
 import { AreaChart } from '@tremor/react';
 import { useState } from 'react';
+import { format } from "date-fns";
 
 const chartdata = [
   {
@@ -64,17 +65,41 @@ const chartdata = [
   },
 ];
 
-const CustomAreaChart = () => {
+const CustomAreaChart = ({ products }) => {
+  const currentDate = new Date();
+  const last7days = new Date();
+  last7days.setDate(currentDate.getDate() - 7);
+
+  const productDailySellRate = {};
+
+  products.forEach((product) => {
+    const productSellDate = new Date(product.createdAt);
+    if(productSellDate >= last7days && productSellDate <= currentDate) {
+    const formatSellDate = format(new Date(productSellDate), 'dd/MM');
+      if(!productDailySellRate[formatSellDate]) {
+        productDailySellRate[formatSellDate] = 0;
+      }
+      productDailySellRate[formatSellDate] += 1;
+    }
+  })
+
+  const chartdata = Object.entries(productDailySellRate).map(([key, val]) => ({
+    date: key,
+    "Product Sell Rate": val
+  }));
+
+  const chart = chartdata.toReversed();
+
   return (
     <>
       <h3 className="text-lg font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
-        Closed Pull Requests
+        Product Sell Rate
       </h3>
       <AreaChart
         className="mt-4 h-72"
-        data={chartdata}
+        data={chart}
         index="date"
-        categories={['2022', '2023']}
+        categories={['Product Sell Rate']}
         colors={['blue', 'red']}
         yAxisWidth={30}
         connectNulls={true}
