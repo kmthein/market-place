@@ -44,4 +44,10 @@ router.get("/get-images/:id", authMiddleware, productController.getSavedImages);
 
 router.delete("/product/delete/:productId/:imgToDelete", authMiddleware, productController.deleteSavedImage);
 
+router.post("/save-product/:id", authMiddleware, productController.saveProduct);
+
+router.post("/unsave-product/:id", authMiddleware, productController.unsaveProduct);
+
+router.get("/save-product", authMiddleware, productController.getSavedProducts);
+
 module.exports = router;

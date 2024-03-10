@@ -1,13 +1,14 @@
 const { validationResult } = require("express-validator");
-const {v2: cloudinary} = require('cloudinary');
-require("dotenv").config(); 
+const { v2: cloudinary } = require("cloudinary");
+require("dotenv").config();
 
 const Product = require("../models/product");
+const User = require("../models/user");
 
-cloudinary.config({ 
-  cloud_name: 'dvos6jlbp', 
-  api_key: '941877997462755', 
-  api_secret: process.env.CLOUD_SECRET 
+cloudinary.config({
+  cloud_name: "dvos6jlbp",
+  api_key: "941877997462755",
+  api_secret: process.env.CLOUD_SECRET,
 });
 
 exports.sellProduct = async (req, res, next) => {
@@ -45,7 +46,9 @@ exports.sellProduct = async (req, res, next) => {
 
 exports.getProducts = async (req, res) => {
   try {
-    const productDocs = await Product.find({ seller: req.userId }).sort({createdAt: -1});
+    const productDocs = await Product.find({ seller: req.userId }).sort({
+      createdAt: -1,
+    });
     if (!productDocs) {
       throw new Error("Product Not Found.");
     }
@@ -63,21 +66,21 @@ exports.getProducts = async (req, res) => {
 };
 
 exports.getProductDetail = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   try {
     const productDoc = await Product.findById(id);
     return res.status(200).json({
       success: true,
       message: "Product details found.",
-      productDoc
-    })
+      productDoc,
+    });
   } catch (error) {
     return res.status(401).json({
       success: false,
       message: error.message,
     });
   }
-}
+};
 
 exports.updateProduct = async (req, res) => {
   const errors = validationResult(req);
@@ -87,14 +90,23 @@ exports.updateProduct = async (req, res) => {
       message: errors.array()[0].msg,
     });
   }
-  const {_id, sellerId, name, description, price, category, used_for, product_has} = req.body;
+  const {
+    _id,
+    sellerId,
+    name,
+    description,
+    price,
+    category,
+    used_for,
+    product_has,
+  } = req.body;
   try {
-    if(req.userId.toString() != sellerId) {
+    if (req.userId.toString() != sellerId) {
       throw new Error("Authorization failed.");
     } else {
-      const productDoc = await Product.findOne({_id});
+      const productDoc = await Product.findOne({ _id });
       productDoc.name = name;
-      productDoc.description= description;
+      productDoc.description = description;
       productDoc.price = price;
       productDoc.category = category;
       productDoc.used_for = used_for;
@@ -103,8 +115,8 @@ exports.updateProduct = async (req, res) => {
       productDoc.save();
       return res.status(201).json({
         success: true,
-        message: "Product updated."
-      })
+        message: "Product updated.",
+      });
     }
   } catch (error) {
     return res.status(401).json({
@@ -112,51 +124,53 @@ exports.updateProduct = async (req, res) => {
       message: error.message,
     });
   }
-}
+};
 
 exports.deleteProduct = async (req, res) => {
   const { id } = req.params;
   try {
     const productDoc = await Product.findOne({ _id: id });
-    if(!productDoc) {
+    if (!productDoc) {
       return res.status(401).json({
         success: false,
-        message: "Product not found."
-      })
+        message: "Product not found.",
+      });
     }
-    if(req.userId.toString() != productDoc.seller.toString()) {
+    if (req.userId.toString() != productDoc.seller.toString()) {
       throw new Error("Not Authorized.");
-    } 
+    }
 
-    if(productDoc.images && Array.isArray(productDoc.images)) {
+    if (productDoc.images && Array.isArray(productDoc.images)) {
       const deletePromise = productDoc.images.map((img) => {
-        const publicId = img.substring(img.lastIndexOf("/") + 1, img.lastIndexOf("."));
+        const publicId = img.substring(
+          img.lastIndexOf("/") + 1,
+          img.lastIndexOf(".")
+        );
         return new Promise((resolve, reject) => {
           cloudinary.uploader.destroy(publicId, (err, result) => {
-            if(err) {
+            if (err) {
               reject(new Error("Destory Failed."));
             } else {
-              resolve(result); 
+              resolve(result);
             }
-          })
-        })
-      })
+          });
+        });
+      });
       await Promise.all(deletePromise);
     }
-
 
     await Product.findByIdAndDelete(id);
     return res.status(202).json({
       success: true,
-      message: "Product deleted."
-    })
+      message: "Product deleted.",
+    });
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: error.message
-    })
+      message: error.message,
+    });
   }
-}
+};
 
 exports.uploadImage = (req, res) => {
   const productId = req.body.product_id;
@@ -164,92 +178,209 @@ exports.uploadImage = (req, res) => {
   let secureUrlArray = [];
 
   try {
-    productImages.forEach(img => {
+    productImages.forEach((img) => {
       cloudinary.uploader.upload(img.path, async (err, result) => {
-        if(!err) {
+        if (!err) {
           const url = result.secure_url;
           secureUrlArray.push(url);
 
-          if(productImages.length == secureUrlArray.length) {
+          if (productImages.length == secureUrlArray.length) {
             await Product.findByIdAndUpdate(productId, {
-              $push: { images: secureUrlArray }
-            })
+              $push: { images: secureUrlArray },
+            });
             return res.status(200).json({
               success: true,
               message: "Product images saved.",
-              secureUrlArray
-            })
+              secureUrlArray,
+            });
           }
-
         } else {
           throw new Error("Cloud upload failed.");
         }
-      })
-    })
+      });
+    });
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: error.message
-    })
+      message: error.message,
+    });
   }
-}
+};
 
 exports.getSavedImages = (req, res) => {
-  const {id} = req.params;
-  return Product.findById(id).select("images").then((productImg) => {
-    return res.status(200).json({
-      success: true,
-      message: "Product images found.",
-      data: productImg
-    })   
-  }).catch((error) => {
-    return res.status(401).json({
-      success: false,
-      message: error.message
+  const { id } = req.params;
+  return Product.findById(id)
+    .select("images")
+    .then((productImg) => {
+      return res.status(200).json({
+        success: true,
+        message: "Product images found.",
+        data: productImg,
+      });
     })
-  });
-}
+    .catch((error) => {
+      return res.status(401).json({
+        success: false,
+        message: error.message,
+      });
+    });
+};
 
 exports.deleteSavedImage = async (req, res) => {
   try {
     const { productId, imgToDelete } = req.params;
-    const decodeImgUrl = decodeURIComponent(imgToDelete)
-    const productDoc = await Product.findByIdAndUpdate(productId, {$pull: {images: decodeImgUrl}});
-    const publicId = decodeImgUrl.substring(decodeImgUrl.lastIndexOf("/") + 1, decodeImgUrl.lastIndexOf("."));
+    const decodeImgUrl = decodeURIComponent(imgToDelete);
+    const productDoc = await Product.findByIdAndUpdate(productId, {
+      $pull: { images: decodeImgUrl },
+    });
+    const publicId = decodeImgUrl.substring(
+      decodeImgUrl.lastIndexOf("/") + 1,
+      decodeImgUrl.lastIndexOf(".")
+    );
     await cloudinary.uploader.destroy(publicId);
-    if(productDoc) {
+    if (productDoc) {
       return res.status(200).json({
         success: true,
-        message: "Image removed."
-      })    
+        message: "Image removed.",
+      });
     } else {
       throw new Error("Image not found.");
     }
-
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: error.message
-    })
+      message: error.message,
+    });
   }
-}
+};
 
 exports.getApprovedProducts = async (req, res) => {
   try {
     const productDoc = await Product.find({ status: "approved" });
-    if(productDoc) {
+    if (productDoc) {
       return res.status(200).json({
         success: true,
-        data: productDoc
-      })  
+        data: productDoc,
+      });
     } else {
       throw new Error("Product not found.");
     }
-
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: error.message
+      message: error.message,
+    });
+  }
+};
+
+exports.getProductByFilter = async (req, res) => {
+  const { searchKey, category } = req.query;
+  try {
+    let query;
+    if (searchKey) {
+      query = { name: { $regex: searchKey, $options: "i" } };
+    }
+    if (category) {
+      query = { category };
+    }
+    const productDoc = await Product.find(query);
+    if (!productDoc) {
+      throw new Error("Product not found.");
+    }
+    return res.status(200).json({
+      success: true,
+      data: productDoc,
+    });
+  } catch (error) {
+    return res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.getProductDetailById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const productDoc = await Product.findById(id).populate("seller", "email name");
+    if(!productDoc) {
+      throw new Error("Product not found.");
+    }
+    return res.status(200).json({
+      success: true,
+      data: productDoc,
+    });
+  } catch (error) {
+    return res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
+exports.saveProduct = async (req, res) => {
+  const {id} = req.params;
+  try {
+    const userDoc = await User.findById(req.userId);
+    if(!userDoc) {
+      throw new Error("User not authorized.");
+    }
+    userDoc.saved_products = [...userDoc.saved_products, id];
+    const savedProduct = await userDoc.save();
+    const { saved_products } = savedProduct;
+    return res.status(200).json({
+      success: true,
+      message: "Product saved.",
+      data: saved_products
     })
+  } catch (error) {
+    return res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
+exports.unsaveProduct = async (req, res) => {
+  const {id} = req.params;
+  try {
+    const userDoc = await User.findById(req.userId);
+    if(!userDoc) {
+      throw new Error("User not authorized.");
+    }
+    const unsavedProduct = await User.findByIdAndUpdate(req.userId, {
+      $pull: {saved_products: id}
+    })
+    const { saved_products } = unsavedProduct;
+    const unsaved = saved_products.filter((p) => p.toString() != id);
+    return res.status(200).json({
+      success: true,
+      message: "Product unsaved.",
+      data: unsaved
+    })
+  } catch (error) {
+    return res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
+exports.getSavedProducts = async (req, res) => {
+  try {
+    const userDoc = await User.findById(req.userId).populate("saved_products").select("saved_products");
+    if(!userDoc) {
+      throw new Error("User not authorized.");
+    }
+    const {saved_products} = userDoc;
+    return res.status(200).json({
+      success: true,
+      data: saved_products
+    })
+  } catch (error) {
+    return res.status(404).json({
+      success: false,
+      message: error.message,
+    });
   }
 }

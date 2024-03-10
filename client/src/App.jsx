@@ -7,6 +7,8 @@ import AuthProvider from './providers/AuthProvider'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import Home from './pages/home/Home'
+import ProductDetail from './pages/product/ProductDetail'
+import SavedProduct from "./pages/savedProducts/Index";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -26,6 +28,14 @@ const App = () => {
           path: "/register",
           element: <Register />
         },
+        {
+          path: "/products/:id",
+          element: <ProductDetail />
+        },
+        {
+          path: "/saved-products",
+          element: <SavedProduct />
+        }
       ]
     },
     {
@@ -35,7 +45,7 @@ const App = () => {
     {
       path: "/admin",
       element: <AuthProvider><AdminIndex /></AuthProvider>
-    }
+    },
   ])
   return (
     <RouterProvider router={router} />

@@ -88,3 +88,48 @@ export const getApprovedProducts = async () => {
     return error.message;    
   }
 }
+
+export const getProductByFilter = async (key, value) => {
+  try {
+    const response = await axiosInstance.get(`/api/products/filter?${key}=${value}`);
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+}
+
+export const getProductById = async (id) => {
+  try {
+    const response = await axiosInstance.get(`/api/products/detail/${id}`);
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+}
+
+export const saveProduct = async (id) => {
+  try {
+    const response = await axiosInstance.post(`/save-product/${id}`);
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+}
+
+export const unsaveProduct = async (id) => {
+  try {
+    const response = await axiosInstance.post(`/unsave-product/${id}`);
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+}
+
+export const getSavedProduct = async () => {
+  try {
+    const response = await axiosInstance.get(`/save-product`);
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+}

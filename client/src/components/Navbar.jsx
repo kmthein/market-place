@@ -33,6 +33,14 @@ const Navbar = ({ home }) => {
     {
       key: "2",
       label: (
+        <Link to="/saved-products">
+          <span>Saved Products</span>
+        </Link>
+      ),
+    },
+    {
+      key: "3",
+      label: (
           <span onClick={(e) => {
             e.preventDefault()
             localStorage.removeItem("token");

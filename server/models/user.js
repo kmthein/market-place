@@ -21,6 +21,10 @@ const userSchema = new Schema({
     status: {
         type: String,
         default: "active"
+    },
+    saved_products: {
+        type: [Schema.Types.ObjectId],
+        ref: "Product"
     }
 }, {
     timestamps: true
