@@ -52,3 +52,7 @@
 .img_scroll::-webkit-scrollbar-thumb:hover {
   background: #555; 
 }
+
+.product_card {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}

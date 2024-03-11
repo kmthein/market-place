@@ -162,7 +162,7 @@ const AllProduct = () => {
         </div>
       ) : (
         <div className=" mx-16 my-8">
-          <div className="flex flex-wrap">
+          <div className="flex flex-wrap gap-6">
             {products && products.length > 0 ? (
               products.map((product) => (
                 <ProductCard

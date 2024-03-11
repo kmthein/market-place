@@ -9,6 +9,7 @@ const SubmitButton = (props) => {
     <>
       {!isProcessing ? (
         <button
+          {...props}
           type="submit"
           className="bg-[#4254b6] text-white hover:bg-[#495cc9] w-20 justify-center hover:text-gray-200 flex font-medium h-10 px-2 gap-1 items-center rounded-md"
         >

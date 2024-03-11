@@ -38,12 +38,12 @@ const ProductCard = ({ product, saved = false, setProducts, productSaved = false
   const { user } = useSelector((state) => state.reducer.user);
   
   return (
-    <div className=" basis-1/4 px-2 mb-5">
+    <div className=" w-[23%] px-2 mb-5 product_card py-4 rounded-md">
       <Link to={`/products/${product._id}`}>
         <img
           src={product.images[0] || NoImgAvaiable}
           alt={product.name}
-          className=" w-full h-[200px] object-contain mb-2"
+          className=" w-full h-[200px] object-contain mb-5"
         />
       </Link>
       <div className="mt-3">
@@ -72,7 +72,7 @@ const ProductCard = ({ product, saved = false, setProducts, productSaved = false
             /> 
             ))}
         </div>
-        <span className="mt-1 font-medium">${product.price}</span>
+        <span className="mt-3 font-medium">${product.price}</span>
       </div>
     </div>
   );
