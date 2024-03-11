@@ -6,6 +6,9 @@ import {
 } from "../../api/product";
 import moment from "moment";
 import { Form, message } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { endLoading, setLoading } from "../../store/slices/uiSlice";
+import { LineWave } from "react-loader-spinner";
 
 const Products = ({
   activeKey,
@@ -15,7 +18,11 @@ const Products = ({
 }) => {
   const [products, setProducts] = useState();
 
+  const { isProcessing } = useSelector((state) => state.ui);
+  const dispatch = useDispatch();
+
   const getProductsHandler = async () => {
+    dispatch(setLoading());
     try {
       const response = await getProducts();
       if (response.success) {
@@ -26,6 +33,7 @@ const Products = ({
     } catch (error) {
       console.log(error.message);
     }
+    dispatch(endLoading());
   };
 
   useEffect(() => {
@@ -56,7 +64,23 @@ const Products = ({
   return (
     <div>
       <h1 className="text-lg font-semibold mb-4">My Products</h1>
-      {products && products.length > 0 ? (
+      {isProcessing && (
+        <div className="flex justify-center pt-8">
+          <LineWave
+            visible={true}
+            height="100"
+            width="100"
+            color="#f0a0a0"
+            ariaLabel="line-wave-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            firstLineColor=""
+            middleLineColor=""
+            lastLineColor=""
+          />
+        </div>
+      )}
+      {products && products.length > 0 && !isProcessing && (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -90,7 +114,9 @@ const Products = ({
                   >
                     {product.name}
                   </th>
-                  <td className="px-6 py-4">{product.category}</td>
+                  <td className="px-6 py-4">
+                    {product.category.replaceAll("_", " ")}
+                  </td>
                   <td className="px-6 py-4">
                     {moment(product.createdAt).format("MMM Do YY")}
                   </td>
@@ -130,7 +156,8 @@ const Products = ({
             </tbody>
           </table>
         </div>
-      ) : (
+      )}
+      {!isProcessing && !products && (
         <div>
           <p className="text-center">Product not added yet.</p>
         </div>

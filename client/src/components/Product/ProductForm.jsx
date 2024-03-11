@@ -19,8 +19,9 @@ import {
 import { getProductDetail, sellProduct, updateProduct } from "../../api/product";
 import UploadImage from "./UploadImage";
 import SubmitButton from "../SubmitButton";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { endLoading, setLoading } from "../../store/slices/uiSlice";
+import { LineWave } from "react-loader-spinner";
 
 const ProductForm = ({ setActiveKey, editMode, oldProductId }) => {
   const [form] = Form.useForm();
@@ -28,6 +29,8 @@ const ProductForm = ({ setActiveKey, editMode, oldProductId }) => {
   const [productId, setProductId] = useState(null);
 
   const [productActiveKey, setProductActiveKey] = useState("1");
+
+  const { isProcessing } = useSelector(state => state.ui);
 
   const dispatch = useDispatch();
 
@@ -59,6 +62,7 @@ const ProductForm = ({ setActiveKey, editMode, oldProductId }) => {
   };
 
   const getProductDetailHandler = async () => {
+    dispatch(setLoading());
     const response = await getProductDetail(oldProductId);
     const {
       name,
@@ -81,6 +85,7 @@ const ProductForm = ({ setActiveKey, editMode, oldProductId }) => {
       product_has,
     };
     form.setFieldsValue(modifiedProduct);
+    dispatch(endLoading());
   };
 
   useEffect(() => {
@@ -96,7 +101,23 @@ const ProductForm = ({ setActiveKey, editMode, oldProductId }) => {
       key: "1",
       label: "Product Details",
       children: (
-        <div>
+          isProcessing ? (
+            <div className="flex justify-center pt-8">
+            <LineWave
+              visible={true}
+              height="100"
+              width="100"
+              color="#f0a0a0"
+              ariaLabel="line-wave-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+              firstLineColor=""
+              middleLineColor=""
+              lastLineColor=""
+            />
+          </div>
+          ) : (
+            <div>
           <h1 className="text-lg font-semibold mb-4">
             {editMode ? "Edit your product" : "What you want to sell?"}
           </h1>
@@ -268,6 +289,7 @@ const ProductForm = ({ setActiveKey, editMode, oldProductId }) => {
             </Form.Item>
           </Form>
         </div>
+          )
       ),
     },
     editMode
