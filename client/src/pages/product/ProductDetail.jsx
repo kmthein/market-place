@@ -8,10 +8,13 @@ import { endLoading, setLoading } from "../../store/slices/uiSlice";
 import { LineWave } from "react-loader-spinner";
 import SubmitButton from "../../components/SubmitButton";
 import { TiArrowBackOutline } from "react-icons/ti";
+import { getAllDeals, savedNewDeal } from "../../api/deal";
+import { formatDistanceToNow } from "date-fns";
 
 const ProductDetail = () => {
   const [product, setProduct] = useState({});
   const [selectedImage, setSelectedImage] = useState(0);
+  const [deals, setDeals] = useState([]);
   const { id } = useParams();
 
   const { isProcessing } = useSelector((state) => state.ui);
@@ -20,8 +23,10 @@ const ProductDetail = () => {
 
   const dispatch = useDispatch();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const getDetailById = async () => {
-    dispatch(setLoading());
+    setIsLoading(true);
     try {
       const response = await getProductById(id);
       if (!response.success) {
@@ -31,18 +36,50 @@ const ProductDetail = () => {
     } catch (error) {
       message.error(error.message);
     }
-    dispatch(endLoading());
+    setIsLoading(false);
   };
+
+  const getDealsHandler = async () => {
+    try {
+      const response = await getAllDeals(id);
+      if (!response.success) {
+        throw new Error(response.message);
+      }
+      setDeals(response.data);
+    } catch (error) {
+      message.error(error.message);
+    }
+  }
 
   useEffect(() => {
     getDetailById();
+    getDealsHandler();
   }, []);
 
   const navigate = useNavigate();
 
+  const [form] = Form.useForm();
+
+  const dealSubmitHandler = async (values) => {
+    dispatch(setLoading());
+    values.product_id = product._id;
+    values.seller_id = product.seller._id;
+    values.dealer_id = user._id;
+    try {
+      const response = await savedNewDeal(values);
+      if(!response.success) {
+        throw new Error(response.message);
+      }
+      message.success(response.message);
+    } catch (error) {
+      message.error(error.message);
+    }
+    dispatch(endLoading());
+  }
+
   return (
     <>
-      {isProcessing ? (
+      {isLoading ? (
         <div className="flex justify-center items-center h-[80vh]">
           <LineWave
             visible={true}
@@ -167,9 +204,7 @@ const ProductDetail = () => {
                     remember: true,
                   }}
                   layout="vertical"
-                  onFinish={() =>
-                    message.success("You deal was sent successfully.")
-                  }
+                  onFinish={dealSubmitHandler}
                 >
                   <Form.Item
                     name="message"
@@ -213,6 +248,27 @@ const ProductDetail = () => {
                 </Form>
               </div>
             )}
+            <hr />
+            <div className="mb-6">            
+              <h1 className="text-xl font-semibold mt-4">Recent Deals</h1>
+            {
+              deals && deals.length > 0 ? (
+              deals.map((deal, i) => (
+                <div className="" key={i}>
+                <div className=" rounded-lg bg-[#f5f4f4] mt-4 px-4 py-3">
+                  <h3 className="font-semibold mt-2">{deal.dealer_id.name}</h3>
+                  <span className=" text-gray-500 text-sm">{formatDistanceToNow(deal.createdAt)} ago</span>
+                  <p className="my-1">{deal.message}</p>
+                </div>
+            </div>
+              ))
+              ) : (
+                <div className=" pb-4">
+                <p className="mt-2 text-gray-500 text-md">There isn't any deal yet.</p>
+                </div>
+              )
+            }
+            </div>
           </div>
         </div>
       )}

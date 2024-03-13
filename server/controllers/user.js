@@ -61,7 +61,7 @@ exports.login = async (req, res, next) => {
         if(userDoc.status == "banned") {
           throw new Error("Your account is banned.");
         }
-        const token = jwt.sign({ userId: userDoc._id }, process.env.JWT_KEY, {expiresIn: "1d"});
+        const token = jwt.sign({ userId: userDoc._id }, process.env.JWT_KEY);
         return res.status(200).json({
           success: true,
           message: "Logged in successfully.",

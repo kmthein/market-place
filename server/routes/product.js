@@ -4,6 +4,7 @@ const { body } = require("express-validator");
 const authMiddleware = require("../middlewares/auth");
 
 const productController = require("../controllers/product");
+const dealController = require("../controllers/deal");
 
 const router = express.Router();
 
@@ -49,5 +50,9 @@ router.post("/save-product/:id", authMiddleware, productController.saveProduct);
 router.post("/unsave-product/:id", authMiddleware, productController.unsaveProduct);
 
 router.get("/save-product", authMiddleware, productController.getSavedProducts);
+
+router.post("/add-deal", authMiddleware, dealController.savedNewDeal);
+
+router.get("/get-deals/:id", authMiddleware, dealController.getAllDealsById);
 
 module.exports = router;
