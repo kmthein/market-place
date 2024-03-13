@@ -60,7 +60,7 @@ const Index = () => {
                 />
               ))
             ) : (
-              <h1 className=" mx-auto my-60">Product Not Found.</h1>
+              <h1 className=" mx-auto my-60">No product saved.</h1>
             )}
           </div>
         )}

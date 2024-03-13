@@ -16,6 +16,8 @@ const ProductDetail = () => {
 
   const { isProcessing } = useSelector((state) => state.ui);
 
+  const { user } = useSelector((state) => state.reducer.user);
+
   const dispatch = useDispatch();
 
   const getDetailById = async () => {
@@ -97,14 +99,15 @@ const ProductDetail = () => {
           <div className=" w-[80%]">
             <div className="flex mt-20 justify-between">
               <div className=" w-[95%]">
-                <h1 className="text-2xl font-semibold">
-                  {product?.name}
-                </h1>
+                <h1 className="text-2xl font-semibold">{product?.name}</h1>
                 <p className="mt-2 pb-6 text-gray-700">
                   {product?.description}
                 </p>
               </div>
-               <TiArrowBackOutline className="text-3xl cursor-pointer" onClick={() => navigate(-1)} />
+              <TiArrowBackOutline
+                className="text-3xl cursor-pointer"
+                onClick={() => navigate(-1)}
+              />
             </div>
 
             <hr />
@@ -148,56 +151,68 @@ const ProductDetail = () => {
               <span>{product?.seller?.email}</span>
             </div>
             <hr />
-            <h1 className="text-xl font-semibold mt-4">Make Deal</h1>
-            <Form
-              initialValues={{
-                remember: true,
-              }}
-              layout="vertical"
-              onFinish={() =>
-                message.success("You deal was sent successfully.")
-              }
-            >
-              <Form.Item
-                name="message"
-                label="Text"
-                className="mt-2"
-                rules={[
-                  {
-                    required: true,
-                    message: "Message must contains.",
-                  },
-                  {
-                    min: 3,
-                    message: "Message must be at least 3 characters.",
-                  },
-                ]}
-                hasFeedback
-              >
-                <Input placeholder="Write something..." />
-              </Form.Item>
-              <Form.Item
-                name="phone"
-                label="Phone Number"
-                className="mt-2"
-                rules={[
-                  {
-                    required: true,
-                    message: "Phone number must contains.",
-                  },
-                  {
-                    min: 6,
-                    message: "Phone number must be valid.",
-                  },
-                ]}
-                hasFeedback
-              >
-                <Input placeholder="Phone number..." />
-              </Form.Item>
-              <div className="flex justify-end pb-8">
-                <SubmitButton>Submit</SubmitButton>
+            {
+              !user && (
+                <div>
+                  <h1 className="text-xl font-semibold mt-4">Make Deal</h1>
+                  <p className="mt-3"><Link to="/login" className="underline">Login</Link> or <Link to="/register" className="underline">Register</Link> to deal this product.</p>
+                </div>
+              )
+            }
+            {user && user._id != product?.seller?._id && (
+              <div>
+                <h1 className="text-xl font-semibold mt-4">Make Deal</h1>
+                <Form
+                  initialValues={{
+                    remember: true,
+                  }}
+                  layout="vertical"
+                  onFinish={() =>
+                    message.success("You deal was sent successfully.")
+                  }
+                >
+                  <Form.Item
+                    name="message"
+                    label="Text"
+                    className="mt-2"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Message must contains.",
+                      },
+                      {
+                        min: 3,
+                        message: "Message must be at least 3 characters.",
+                      },
+                    ]}
+                    hasFeedback
+                  >
+                    <Input placeholder="Write something..." />
+                  </Form.Item>
+                  <Form.Item
+                    name="phone"
+                    label="Phone Number"
+                    className="mt-2"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Phone number must contains.",
+                      },
+                      {
+                        min: 6,
+                        message: "Phone number must be valid.",
+                      },
+                    ]}
+                    hasFeedback
+                  >
+                    <Input placeholder="Phone number..." />
+                  </Form.Item>
+                  <div className="flex justify-end pb-8">
+                    <SubmitButton>Submit</SubmitButton>
+                  </div>
+                </Form>
               </div>
-            </Form>
+            )}
           </div>
         </div>
       )}

@@ -38,7 +38,7 @@ const ProductCard = ({ product, saved = false, setProducts, productSaved = false
   const { user } = useSelector((state) => state.reducer.user);
   
   return (
-    <div className=" w-[23%] px-2 mb-5 product_card py-4 rounded-md">
+    <div className=" w-[23%] px-2 mb-5 product_card py-4 rounded-md hover:-translate-y-1 hover:bg-[#ffffff] duration-150">
       <Link to={`/products/${product._id}`}>
         <img
           src={product.images[0] || NoImgAvaiable}
