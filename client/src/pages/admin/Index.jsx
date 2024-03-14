@@ -13,6 +13,8 @@ import { getAllProducts, getAllUsers } from "../../api/admin";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Dashboard from "./Dashboard";
+import Notification from "../notification/Notification";
+import { getAllNotifications, getUnreadNotiCount } from "../../api/notification";
 
 const Index = () => {
   const [activeKey, setActiveKey] = useState("1");
@@ -20,6 +22,11 @@ const Index = () => {
   const [oldProductId, setOldProductId] = useState(null);
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [notiCount, setNotiCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalProducts, setTotalProducts] = useState(0);
 
   const [form] = Form.useForm();
   const onChange = (key) => {
@@ -27,11 +34,14 @@ const Index = () => {
     setEditMode(false);
   };
 
-  const getAllProductsHandler = async () => {
+  const getAllProductsHandler = async (page = 1, perPage = 10) => {
     try {
-      const response = await getAllProducts();
+      const response = await getAllProducts(page, perPage);
       if (response.success) {
         setProducts(response.data);
+        setCurrentPage(response.currentPage);
+        setTotalPages(response.totalPages);
+        setTotalProducts(response.totalProducts);
       } else {
         throw new Error(response.message);
       }
@@ -61,6 +71,32 @@ const Index = () => {
       message.error(error.message);      
     }
   }
+
+  const getNotiCount = async () => {
+    try {
+      const response = await getUnreadNotiCount();
+      if (response.success) {
+        setNotiCount(response.data);
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+      setNotiCount(0);
+    }
+  }
+
+  const getNotifications = async () => {
+    try {
+      const response = await getAllNotifications();
+      if(!response.success) {
+        throw new Error(response.message);
+      }
+      setNotifications(response.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
   
   useEffect(() => {
     isAdmin();
@@ -68,19 +104,21 @@ const Index = () => {
       getAllProductsHandler();
     } 
     getAllUsersHandler();
+    getNotiCount();
+    getNotifications();
   }, [activeKey])
 
   const items = [
     {
       key: "1",
       label: "Dashboard",
-      children: <Dashboard products={products} users={users} />,
+      children: <Dashboard products={products} users={users} totalProducts={totalProducts} />,
       icon: <RxDashboard className=" inline-block text-lg" />
     },
     {
       key: "2",
       label: "Manage Products",
-      children: <Products products={products} getAllProductsHandler={getAllProductsHandler} />,
+      children: <Products products={products} getAllProductsHandler={getAllProductsHandler} currentPage={currentPage} totalPages={totalPages} />,
       icon: <MdOutlineProductionQuantityLimits className=" inline-block text-lg" />
     },
     {
@@ -92,7 +130,7 @@ const Index = () => {
     {
       key: "4",
       label: "Notification",
-      children: "Content of Tab Pane 3",
+      children: <Notification />,
       icon: <IoMdNotificationsOutline className=" inline-block text-lg" />
     },
     {
@@ -106,7 +144,7 @@ const Index = () => {
   return (
     <div>
       <Navbar home={false} />
-      <div className=" h-screen">
+      <div className=" h-screen pt-10">
       <Tabs activeKey={activeKey} items={items} tabPosition="left" onChange={onChange} className="xl:mx-[200px] bg-[#ffffff]" />
       </div>
     </div>

@@ -4,11 +4,11 @@ import { AiOutlineStock, AiOutlineShopping } from "react-icons/ai";
 import { FaUsers } from "react-icons/fa";
 import CustomAreaChart from "../../components/Dashboard/CustomAreaChart";
 import CustomBarList from "../../components/Dashboard/CustomBarList";
+import { getAllProductsCount } from "../../api/admin";
 
-const Dashboard = ({ products, users }) => {
+const Dashboard = ({ products, users, totalProducts }) => {
   const [totalSales, setTotalSales] = useState(0);
   const [activeUsers, setActiveUsers] = useState(0);
-  const [totalProducts, setTotalProducts] = useState(0);
 
   const calcTotalSales = () => {
     const totalAmount = products.reduce((a, b) => {
@@ -16,11 +16,9 @@ const Dashboard = ({ products, users }) => {
     }, 0);
     setTotalSales(totalAmount);
   }
-
   useEffect(() => {
     calcTotalSales();
     setActiveUsers(users.length);
-    setTotalProducts(products.length);
   }, [products])
 
   return (
@@ -40,7 +38,7 @@ const Dashboard = ({ products, users }) => {
         />
         <CustomCard
           title={"Total Products"}
-          count={"56"}
+          count={totalProducts}
           icon={AiOutlineShopping}
           note={"items"}
         />

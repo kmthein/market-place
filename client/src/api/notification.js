@@ -21,3 +21,25 @@ export const getAllNotifications = async () => {
         return error.message;
     }
 }
+
+export const updateNotiRead = async (id) => {
+    try {
+        const response = await axiosInstance.get(`/noti-read/${id}`, {
+            validateStatus: () => true
+        })
+        return response.data;
+    } catch (error) {
+        return error.message;
+    }
+}
+
+export const getUnreadNotiCount = async () => {
+    try {
+        const response = await axiosInstance.get(`/noti-count`, {
+            validateStatus: () => true
+        })
+        return response.data;
+    } catch (error) {
+        return error.message;
+    }
+}

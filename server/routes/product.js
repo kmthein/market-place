@@ -60,4 +60,8 @@ router.post("/notify", authMiddleware, notificationController.pushNotification);
 
 router.get("/get-notification", authMiddleware, notificationController.getAllNotifications);
 
+router.get("/noti-read/:id", authMiddleware, notificationController.notiReadUpdate);
+
+router.get("/noti-count", authMiddleware, notificationController.getUnreadNotiCount);
+
 module.exports = router;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
-import { Avatar, Badge, Form, Tabs } from "antd";
+import { Avatar, Badge, Form, Tabs, notification } from "antd";
 import AddProduct from "./ManageProduct";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { IoMdNotificationsOutline } from "react-icons/io";
@@ -11,7 +11,7 @@ import Products from "./Products";
 import ManageProduct from "./ManageProduct";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getAllNotifications } from "../../api/notification";
+import { getAllNotifications, getUnreadNotiCount } from "../../api/notification";
 import Notification from "../notification/Notification";
 
 const Index = () => {
@@ -19,6 +19,7 @@ const Index = () => {
   const [editMode, setEditMode] = useState(false);
   const [oldProductId, setOldProductId] = useState(null);
   const [notifications, setNotifications] = useState([]);
+  const [notiCount, setNotiCount] = useState(0);
 
   const [form] = Form.useForm();
   const onChange = (key) => {
@@ -38,6 +39,20 @@ const Index = () => {
       console.log(error.message);
     }
   };
+
+  const getNotiCount = async () => {
+    try {
+      const response = await getUnreadNotiCount();
+      if (response.success) {
+        setNotiCount(response.data);
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+      setNotiCount(0);
+    }
+  }
 
   const getNotifications = async () => {
     try {
@@ -63,10 +78,10 @@ const Index = () => {
 
   useEffect(() => {
     isNotUser();
+    getNotiCount();
     getNotifications();
   }, [activeKey])
 
-  console.log(notifications);
   const items = [
     {
       key: "1",
@@ -82,8 +97,8 @@ const Index = () => {
     },
     {
       key: "3",
-      label: <span>Notification <Badge count={notifications.length} className=" absolute bottom-5 right-3" /></span>,
-      children: <Notification notifications={notifications} />,
+      label: <span>Notification <Badge count={notiCount} className=" absolute bottom-5 right-3" /></span>,
+      children: <Notification notifications={notifications} getNotifications={getNotifications} getNotiCount={getNotiCount} />,
       icon: <IoMdNotificationsOutline className=" inline-block text-lg" />
     },
     {

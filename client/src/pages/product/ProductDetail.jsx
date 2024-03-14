@@ -72,6 +72,7 @@ const ProductDetail = () => {
         throw new Error(response.message);
       }
       message.success(response.message);
+      form.resetFields();
       await pushNotification({
         title: "New Deal Made",
         message: `Hi ${product.seller.name}, your ${product.name} was made a deal by ${user.name}.`,

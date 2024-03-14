@@ -255,12 +255,20 @@ exports.deleteSavedImage = async (req, res) => {
 };
 
 exports.getApprovedProducts = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const perPage = 8;
+
   try {
-    const productDoc = await Product.find({ status: "approved" });
+    const productDoc = await Product.find({ status: "approved" }).skip((page - 1) * perPage).limit(perPage);
+    const totalProducts = await Product.find({ status: "approved" }).countDocuments();
+    const totalPages = Math.ceil(totalProducts / perPage);
     if (productDoc) {
       return res.status(200).json({
         success: true,
         data: productDoc,
+        totalPages,
+        currentPage: page,
+        totalProducts
       });
     } else {
       throw new Error("Product not found.");
@@ -278,10 +286,10 @@ exports.getProductByFilter = async (req, res) => {
   try {
     let query;
     if (searchKey) {
-      query = { name: { $regex: searchKey, $options: "i" } };
+      query = { name: { $regex: searchKey, $options: "i" }, status: "approved" };
     }
     if (category) {
-      query = { category };
+      query = { category, status: "approved" };
     }
     const productDoc = await Product.find(query);
     if (!productDoc) {

@@ -3,7 +3,7 @@ import Badge from "../Badge";
 import ProductCard from "../Product/ProductCard";
 import { getApprovedProducts, getProductByFilter } from "../../api/product";
 import { IoIosSearch } from "react-icons/io";
-import { message } from "antd";
+import { Pagination, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { endLoading, setLoading } from "../../store/slices/uiSlice";
 import { LineWave } from "react-loader-spinner";
@@ -43,25 +43,29 @@ const AllProduct = () => {
   const [products, setProducts] = useState([]);
   const [input, setInput] = useState(null);
   const [categoryIndex, setCategoryIndex] = useState(null);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { isProcessing } = useSelector((state) => state.ui);
 
   const dispatch = useDispatch();
 
-  const getAllProducts = async () => {
+  const getAllProducts = async (page = 1, perPage = 8) => {
     dispatch(setLoading());
     try {
-      const response = await getApprovedProducts();
+      const response = await getApprovedProducts(page, perPage);
       if (!response.success) {
         throw new Error(response.message);
       }
       setProducts(response.data);
+      setTotalPages(response.totalPages);
+      setCurrentPage(response.currentPage);
     } catch (error) {}
     dispatch(endLoading());
   };
 
   useEffect(() => {
-    getAllProducts();
+    getAllProducts(1, 8);
   }, []);
 
   const searchSubmitHandler = async (e) => {
@@ -94,6 +98,10 @@ const AllProduct = () => {
     }
     dispatch(endLoading());
   };
+
+  const handlePagination = (page, perPage) => {
+    getAllProducts(page, perPage)
+  }
 
   const { user } = useSelector((state) => state.reducer.user);
 
@@ -178,6 +186,13 @@ const AllProduct = () => {
               <h1 className=" mx-auto my-60">Product Not Found.</h1>
             )}
           </div>
+          {
+            categoryIndex == null && input == null && (
+              <div className=" flex justify-center">
+                <Pagination current={currentPage} total={totalPages * 8} onChange={handlePagination} />
+              </div>
+            )
+          }
         </div>
       )}
     </div>

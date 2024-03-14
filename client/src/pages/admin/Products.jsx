@@ -1,9 +1,14 @@
 import React from "react";
 import moment from "moment";
 import { adminActionProduct } from "../../api/admin";
-import { message } from "antd";
+import { Pagination, message } from "antd";
 
-const Products = ({ products, getAllProductsHandler }) => {
+const Products = ({
+  products,
+  getAllProductsHandler,
+  currentPage,
+  totalPages,
+}) => {
   const adminActionHandler = async (type, id) => {
     try {
       const response = await adminActionProduct({ type, id });
@@ -15,6 +20,10 @@ const Products = ({ products, getAllProductsHandler }) => {
     } catch (error) {
       message.error(error.message);
     }
+  };
+
+  const handlePagination = (page, perPage) => {
+    getAllProductsHandler(page, perPage);
   };
   return (
     <div>
@@ -128,6 +137,17 @@ const Products = ({ products, getAllProductsHandler }) => {
           <p className="text-center">Product not added yet.</p>
         </div>
       )}
+      {
+        products && products.length > 0 && (
+          <div className=" flex justify-center mt-2">
+          <Pagination
+            current={currentPage}
+            total={totalPages * 10}
+            onChange={handlePagination}
+          />
+        </div>
+        )
+      }
     </div>
   );
 };
