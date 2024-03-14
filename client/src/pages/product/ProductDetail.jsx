@@ -10,6 +10,7 @@ import SubmitButton from "../../components/SubmitButton";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { getAllDeals, savedNewDeal } from "../../api/deal";
 import { formatDistanceToNow } from "date-fns";
+import { pushNotification } from "../../api/notification";
 
 const ProductDetail = () => {
   const [product, setProduct] = useState({});
@@ -71,6 +72,13 @@ const ProductDetail = () => {
         throw new Error(response.message);
       }
       message.success(response.message);
+      await pushNotification({
+        title: "New Deal Made",
+        message: `Hi ${product.seller.name}, your ${product.name} was made a deal by ${user.name}.`,
+        owner_id: product.seller._id,
+        product_id: product._id
+      })
+      // form.resetFields();
     } catch (error) {
       message.error(error.message);
     }

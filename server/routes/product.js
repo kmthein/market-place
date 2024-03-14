@@ -5,6 +5,7 @@ const authMiddleware = require("../middlewares/auth");
 
 const productController = require("../controllers/product");
 const dealController = require("../controllers/deal");
+const notificationController = require("../controllers/notification");
 
 const router = express.Router();
 
@@ -54,5 +55,9 @@ router.get("/save-product", authMiddleware, productController.getSavedProducts);
 router.post("/add-deal", authMiddleware, dealController.savedNewDeal);
 
 router.get("/get-deals/:id", authMiddleware, dealController.getAllDealsById);
+
+router.post("/notify", authMiddleware, notificationController.pushNotification);
+
+router.get("/get-notification", authMiddleware, notificationController.getAllNotifications);
 
 module.exports = router;

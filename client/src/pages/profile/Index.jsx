@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
-import { Form, Tabs } from "antd";
+import { Avatar, Badge, Form, Tabs } from "antd";
 import AddProduct from "./ManageProduct";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { IoMdNotificationsOutline } from "react-icons/io";
@@ -11,11 +11,14 @@ import Products from "./Products";
 import ManageProduct from "./ManageProduct";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { getAllNotifications } from "../../api/notification";
+import Notification from "../notification/Notification";
 
 const Index = () => {
   const [activeKey, setActiveKey] = useState("1");
   const [editMode, setEditMode] = useState(false);
   const [oldProductId, setOldProductId] = useState(null);
+  const [notifications, setNotifications] = useState([]);
 
   const [form] = Form.useForm();
   const onChange = (key) => {
@@ -36,6 +39,18 @@ const Index = () => {
     }
   };
 
+  const getNotifications = async () => {
+    try {
+      const response = await getAllNotifications();
+      if(!response.success) {
+        throw new Error(response.message);
+      }
+      setNotifications(response.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   const {user} = useSelector((state) => state.reducer.user);
 
   const navigate = useNavigate();
@@ -48,8 +63,10 @@ const Index = () => {
 
   useEffect(() => {
     isNotUser();
+    getNotifications();
   }, [activeKey])
 
+  console.log(notifications);
   const items = [
     {
       key: "1",
@@ -65,8 +82,8 @@ const Index = () => {
     },
     {
       key: "3",
-      label: "Notification",
-      children: "Content of Tab Pane 3",
+      label: <span>Notification <Badge count={notifications.length} className=" absolute bottom-5 right-3" /></span>,
+      children: <Notification notifications={notifications} />,
       icon: <IoMdNotificationsOutline className=" inline-block text-lg" />
     },
     {
