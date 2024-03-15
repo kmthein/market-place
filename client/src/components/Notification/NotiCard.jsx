@@ -1,7 +1,7 @@
 import { formatDistanceToNow } from "date-fns";
 import React from "react";
 import { Link } from "react-router-dom";
-import { updateNotiRead } from "../../api/notification";
+import { deleteNotiById, updateNotiRead } from "../../api/notification";
 
 const NotiCard = ({ noti, getNotifications, getNotiCount }) => {
   const notiReadHandler = async (id) => {
@@ -14,6 +14,18 @@ const NotiCard = ({ noti, getNotifications, getNotiCount }) => {
       getNotiCount();
     } catch (error) {
       console.log(error.message);
+    }
+  }
+
+  const deleteNotiHandler = async (id) => {
+    try {
+      const response = await deleteNotiById(id);
+      if(!response.success) {
+
+      }
+      getNotifications();
+    } catch (error) {
+      
     }
   }
 
@@ -30,6 +42,7 @@ const NotiCard = ({ noti, getNotifications, getNotiCount }) => {
         </p>
         <div className="text-right">
             <Link to={`/products/${noti.product_id}`} className=" text-blue-700 font-medium">View Deal</Link>
+            <button className=" text-red-500 font-medium ml-4 hover:underline" onClick={() => deleteNotiHandler(noti._id)}>Delete</button>
         </div>
       </div>
     </>

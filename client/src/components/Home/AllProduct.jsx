@@ -69,8 +69,11 @@ const AllProduct = () => {
   }, []);
 
   const searchSubmitHandler = async (e) => {
-    dispatch(setLoading());
     e.preventDefault();
+    if(input.trim().length == 0) {
+      message.error("Enter a keyword to search!")
+    }
+    dispatch(setLoading());
     try {
       const response = await getProductByFilter("searchKey", input);
       if (!response.success) {
@@ -114,6 +117,7 @@ const AllProduct = () => {
             <input
               type="text"
               placeholder="search"
+              value={input}
               className=" rounded-full outline-none px-2 border-0 w-full mx-4"
               onChange={(e) => setInput(e.target.value)}
             />
@@ -123,7 +127,10 @@ const AllProduct = () => {
             {input && (
               <span
                 className="mr-2 pr-2 text-sm text-red-500 font-medium cursor-pointer hover:underline"
-                onClick={getAllProducts}
+                onClick={() => {
+                  setInput("");
+                  getAllProducts();
+                }}
               >
                 Clear
               </span>
@@ -131,7 +138,7 @@ const AllProduct = () => {
           </div>
         </div>
       </form>
-      <div className="flex gap-4 justify-center">
+      <div className="flex gap-4 justify-center flex-wrap">
         <Badge
           label="All"
           className={`cursor-pointer hover:bg-[#e4baba] ${

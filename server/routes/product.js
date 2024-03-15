@@ -1,3 +1,4 @@
+
 const express = require("express");
 const { body } = require("express-validator");
 
@@ -63,5 +64,9 @@ router.get("/get-notification", authMiddleware, notificationController.getAllNot
 router.get("/noti-read/:id", authMiddleware, notificationController.notiReadUpdate);
 
 router.get("/noti-count", authMiddleware, notificationController.getUnreadNotiCount);
+
+router.get("/delete-noti/:id", authMiddleware, notificationController.deleteNotiById);
+
+router.get("/delete/all-noti", authMiddleware, notificationController.deleteAllNoti);
 
 module.exports = router;

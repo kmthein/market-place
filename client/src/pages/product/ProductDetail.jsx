@@ -72,14 +72,13 @@ const ProductDetail = () => {
         throw new Error(response.message);
       }
       message.success(response.message);
-      form.resetFields();
       await pushNotification({
         title: "New Deal Made",
         message: `Hi ${product.seller.name}, your ${product.name} was made a deal by ${user.name}.`,
         owner_id: product.seller._id,
         product_id: product._id
       })
-      // form.resetFields();
+      form.resetFields();
     } catch (error) {
       message.error(error.message);
     }
@@ -214,6 +213,7 @@ const ProductDetail = () => {
                   }}
                   layout="vertical"
                   onFinish={dealSubmitHandler}
+                  form={form}
                 >
                   <Form.Item
                     name="message"

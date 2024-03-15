@@ -4,7 +4,6 @@ import { AiOutlineStock, AiOutlineShopping } from "react-icons/ai";
 import { FaUsers } from "react-icons/fa";
 import CustomAreaChart from "../../components/Dashboard/CustomAreaChart";
 import CustomBarList from "../../components/Dashboard/CustomBarList";
-import { getAllProductsCount } from "../../api/admin";
 
 const Dashboard = ({ products, users, totalProducts }) => {
   const [totalSales, setTotalSales] = useState(0);

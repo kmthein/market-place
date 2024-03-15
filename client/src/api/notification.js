@@ -43,3 +43,25 @@ export const getUnreadNotiCount = async () => {
         return error.message;
     }
 }
+
+export const deleteNotiById = async (id) => {
+    try {
+        const response = await axiosInstance.get(`/delete-noti/${id}`, {
+            validateStatus: () => true
+        })
+        return response.data;
+    } catch (error) {
+        return error.message;
+    }
+}
+
+export const deleteAllNoti = async (id) => {
+    try {
+        const response = await axiosInstance.get(`/delete/all-noti`, {
+            validateStatus: () => true
+        })
+        return response.data;
+    } catch (error) {
+        return error.message;
+    }
+}

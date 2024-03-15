@@ -86,3 +86,34 @@ exports.notiReadUpdate = async (req, res) => {
     });
   }
 };
+
+exports.deleteNotiById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const notiDoc = await Notification.findByIdAndDelete(id);
+    return res.status(200).json({
+      success: true,
+      message: "Notification deleted",
+    });
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
+exports.deleteAllNoti = async (req, res) => {
+  try {
+    const notiDoc = await Notification.deleteMany({ owner_id: req.userId });
+    return res.status(200).json({
+      success: true,
+      message: "All notifications deleted",
+    });
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}

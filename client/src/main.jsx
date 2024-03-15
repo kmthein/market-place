@@ -7,6 +7,11 @@ import { Provider } from 'react-redux'
 import store from './store/store.js'
 import { persistStore } from "redux-persist"
 import { PersistGate } from 'redux-persist/integration/react'
+import { disableReactDevTools } from '@fvilers/disable-react-devtools';
+
+if (import.meta.env.VITE_MODE === 'production') {
+  disableReactDevTools();
+}
 
 const persistor = persistStore(store);
 

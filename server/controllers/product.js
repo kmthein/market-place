@@ -130,6 +130,9 @@ exports.deleteProduct = async (req, res) => {
   const { id } = req.params;
   try {
     const productDoc = await Product.findOne({ _id: id });
+    if(req.userId.toString() != productDoc.seller.toString()) {
+      throw new Error("Authorization failed.");
+    } 
     if (!productDoc) {
       return res.status(401).json({
         success: false,
@@ -172,12 +175,16 @@ exports.deleteProduct = async (req, res) => {
   }
 };
 
-exports.uploadImage = (req, res) => {
+exports.uploadImage = async (req, res) => {
   const productId = req.body.product_id;
   const productImages = req.files;
   let secureUrlArray = [];
 
   try {
+    const productDoc = await Product.findById(productId);
+    if(req.userId.toString() != productDoc.seller.toString()) {
+      throw new Error("Authorization failed.");
+    } 
     productImages.forEach((img) => {
       cloudinary.uploader.upload(img.path, async (err, result) => {
         if (!err) {
