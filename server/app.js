@@ -31,7 +31,7 @@ const publicRoutes = require("./routes/public");
 
 const app = express();
 
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: "https://shopxchange.onrender.com/" }));
 app.use(bodyParser.json());
 
 app.use(
